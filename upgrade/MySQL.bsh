@@ -15,7 +15,7 @@ mysql --defaults-extra-file=/root/.config.cnf --database=MySB_db --verbose < $My
 
 #### 3 - UPDATE some tables - BoF
 # dnscrypt_config
-cmdMySQL 'MySB_db' "UPDATE dnscrypt_config SET dnssec = 'no', csv_url = 'https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v1/dnscrypt-resolvers.csv' WHERE id_dnscrypt_config='1';" -v
+cmdMySQL 'MySB_db' "UPDATE dnscrypt_config SET dnssec = 'no', csv_url = 'https://raw.githubusercontent.com/toulousain79/MySB/v5.1/files/dnscrypt-resolvers.csv' WHERE id_dnscrypt_config='1';" -v
 # lets_encrypt
 cmdMySQL 'MySB_db' "DELETE FROM lets_encrypt;" -v
 mysql --defaults-extra-file=/root/.config.cnf --database=MySB_db --verbose < $MySB_InstallDir/upgrade/lets_encrypt.sql

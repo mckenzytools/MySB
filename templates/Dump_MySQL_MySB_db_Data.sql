@@ -74,7 +74,7 @@ INSERT INTO `blocklists` (`id_blocklists`, `author`, `list_name`, `pgl_list_name
 --
 
 INSERT INTO `dnscrypt_config` (`sig_key`, `csv_url`) VALUES
-('RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3','https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v1/dnscrypt-resolvers.csv');
+('RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3','https://raw.githubusercontent.com/toulousain79/MySB/v5.1/files/dnscrypt-resolvers.csv');
 
 --
 -- Contenu de la table `lets_encrypt`
