@@ -19,15 +19,15 @@ get_loaded_file="$5"	# /home/user/rtorrent/watch/Apps/ubuntu-16.04.3-server-amd6
 # ftp OR rsync
 ModeSync="`sqlite3 -cmd '.timeout 150000' $DataBase "SELECT mode_sync FROM ident WHERE ident_id = '1';"`"
 # Destination directory, WITH starting './' and WITHOUT ending '/'. (ex: ./home/myuser)
-DstDir="`sqlite3 -cmd '.timeout 150000' $DataBase "SELECT dst_dir FROM ident WHERE ident_id = '1';"`"
+RemoteDir="`sqlite3 -cmd '.timeout 150000' $DataBase "SELECT dst_dir FROM ident WHERE ident_id = '1';"`"
 # Hostname OR IP address of the destination. (ex: myserver.mydomain.com)
-DstSrv="`sqlite3 -cmd '.timeout 150000' $DataBase "SELECT dst_srv FROM ident WHERE ident_id = '1';"`"
+RemoteSrv="`sqlite3 -cmd '.timeout 150000' $DataBase "SELECT dst_srv FROM ident WHERE ident_id = '1';"`"
 # Port (ex: 22)
-DstPort="`sqlite3 -cmd '.timeout 150000' $DataBase "SELECT dst_port FROM ident WHERE ident_id = '1';"`"
+RemotePort="`sqlite3 -cmd '.timeout 150000' $DataBase "SELECT dst_port FROM ident WHERE ident_id = '1';"`"
 # Username
-DstUser="`sqlite3 -cmd '.timeout 150000' $DataBase "SELECT dst_user FROM ident WHERE ident_id = '1';"`"
+RemoteUser="`sqlite3 -cmd '.timeout 150000' $DataBase "SELECT dst_user FROM ident WHERE ident_id = '1';"`"
 # Password
-DstPass="`sqlite3 -cmd '.timeout 150000' $DataBase "SELECT dst_pass FROM ident WHERE ident_id = '1';"`"
+RemotePass="`sqlite3 -cmd '.timeout 150000' $DataBase "SELECT dst_pass FROM ident WHERE ident_id = '1';"`"
 # Max file to synchronize from 'FileList' per cronjob ? (0 for sync all)
 MaxToSync="`sqlite3 -cmd '.timeout 150000' $DataBase "SELECT max_to_sync FROM ident WHERE ident_id = '1';"`"
 # 1: Create a subdirectory for alone files (needed by some scraper) | 0: Do not create subdirectory
@@ -117,7 +117,7 @@ fi
 
 #### Retrieving files to transfer
 fnListing() {
-	local nListId sGetBasePath sGetDirectory sGetCustom1 sGetName sGetLoadedFile sGetNameEscaped sMailObject sSubDirectory dStartDate dStartHour nPid sLocalSize sRemoteSize sDstDir sRemoteDir nError
+	local nListId sGetBasePath sGetDirectory sGetCustom1 sGetName sGetLoadedFile sGetNameEscaped sMailObject sSubDirectory dStartDate dStartHour nPid sLocalSize sRemoteSize sDstDir sRemoteDestination nError
 
 	# VARs
 	nListId="$1"
@@ -131,7 +131,6 @@ fnListing() {
 	sLocalSize=0
 	sRemoteSize=1
 	nError=0
-	sGetNameEscaped="`echo $sGetName | sed s,/,\\\\\\\\\\/,g`"
 	sMailObject="$MailObjectOK"
 	nPid="`cat $FileLock`"
 
@@ -144,36 +143,29 @@ fnListing() {
 	fi
 
 	# Need to create a subdirectory on destination ?
-	if [ -f "$sGetBasePath" ] || [ -d "$sGetBasePath" ]; then
-		if [ "$CreateSubDir" -eq 1 ]; then
-			sGetNameEscaped="`echo $sGetNameEscaped | sed 's/\[/\\\[/g;' | sed 's/\]/\\\]/g;' | sed 's/(/\\(/g' | sed 's/)/\\)/g'`"
-			sSubDirectory="`echo $sGetBasePath | sed "s/$sGetNameEscaped//g;" | sed s,/,\\\\\\\\\\/,g`"
-			sSubDirectory="`echo ${sGetBasePath%.*} | sed "s/$sSubDirectory//g;" | sed -e 's/^ //g;' | sed 's/\s+$//'`"
-		fi
-	fi
-	# Check local file or directory size
-	sLocalSize="`du -hs $sGetBasePath | awk '{ print $1 }' | sed -e 's/,/./g;'`"
-
-	if [ ! -z "$sSubDirectory" ] && [ "$CreateSubDir" -eq 1 ]; then
-		sDstDir="$DstDir/$sGetCustom1/$sSubDirectory"
-		sRemoteDir="$sDstDir"
-	else
-		sDstDir="$DstDir/$sGetCustom1"
-		sRemoteDir="$sDstDir/$sGetName"
+	sDstDir="$RemoteDir/$sGetCustom1"
+	if [ -f "$sGetBasePath" ] && [ "$CreateSubDir" -eq 1 ]; then
+		sSubDirectory="${sGetBasePath##*/}"
+		sSubDirectory="${sSubDirectory%.[^.]*}"
+		sDstDir="$RemoteDir/$sGetCustom1/$sSubDirectory"
 	fi
 	sDstDir="`echo $sDstDir | sed -e 's/^ //g;' | sed 's/\s+$//'`"
-	sDstDir="`echo $sDstDir | sed 's/\[//g;' | sed 's/\]//g;' | sed 's/(//g' | sed 's/)//g' | sed 's/\ /./g;' | sed -e 's/\/\//\//g;'`"
-	sRemoteDir="`echo $sRemoteDir | sed 's/\[//g;' | sed 's/\]//g;' | sed 's/(//g' | sed 's/)//g' | sed 's/\ /\\\ /g;' | sed -e 's/\/\//\//g;'`"
+	sDstDir="`echo $sDstDir | sed 's/\[//g;' | sed 's/\]//g;' | sed 's/(//g' | sed 's/)//g' | sed 's/\ /./g;'`"
+	sRemoteDestination="`echo $sDstDir/$sGetName | sed 's/\[//g;' | sed 's/\]//g;' | sed 's/(//g' | sed 's/)//g' | sed 's/\ /./g;'`"
+
+	# Check local file or directory size
+	sLocalSize="`du -hs $sGetBasePath | awk '{ print $1 }' | sed -e 's/,/./g;'`"
 
 	# Log
 	echo "#### START ####"
 	echo "Script:		$0"
 	echo "From:		$sGetBasePath"
-	echo "To:		$sDstDir"
+	echo "To:		$sDstDir/$sGetNameEscaped"
 	echo "Size:		$sLocalSize (local)"
 	echo "Category:	$sGetCustom1 ($CategoryList)"
-	echo "User:		$DstUser"
-	echo "Server:		$DstSrv"
+	echo "User:		$RemoteUser"
+	echo "Server:		$RemoteSrv"
+	echo "Protocol:		$ModeSync"
 	echo "Date:		$dStartDate"
 	echo "Hour:		$dStartHour"
 	echo "--------------------"
@@ -184,16 +176,16 @@ fnListing() {
 	case "$ModeSync" in
 		'rsync')
 			# Creating sub-directory on destination
-			sshpass -p $DstPass ssh -p $DstPort -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $DstUser@$DstSrv "if [ ! -d \"$sDstDir\" ]; then mkdir -p \"$sDstDir\"; fi" 2> /dev/null
+			sshpass -p $RemotePass ssh -p $RemotePort -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $RemoteUser@$RemoteSrv "mkdir -p \"$sDstDir\"" 2> /dev/null
 
 			# Start synchronization with RSYNC
 			for ((i = 3; i >= 1; i -= 1)); do
-				rsync -rtvyz --numeric-ids --partial --append --stats --timeout=10 -e "/usr/bin/sshpass -p$DstPass ssh -p $DstPort -c $RsyncCipher -o Compression=yes -x -T -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" "$sGetBasePath" $DstUser@$DstSrv:"$sDstDir/"
+				rsync -rtvyz --numeric-ids --partial --append --stats --timeout=10 -e "/usr/bin/sshpass -p$RemotePass ssh -p $RemotePort -c $RsyncCipher -o Compression=yes -x -T -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" "$sGetBasePath" $RemoteUser@$RemoteSrv:"$sDstDir/"
 				nError=$?
 				# Check remote file or directory size
-				# sRemoteSize="`sshpass -p $DstPass ssh -p $DstPort -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $DstUser@$DstSrv "du -hs \"$sRemoteDir\"" 2> /dev/null`"
-				# sRemoteSize="`echo $sRemoteSize | awk '{ print $1 }'`"
-				# if [ $sLocalSize == $sRemoteSize ]; then
+				sRemoteSize="`sshpass -p $RemotePass ssh -p $RemotePort -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $RemoteUser@$RemoteSrv "du -hs \"$sRemoteDestination\"" 2> /dev/null`"
+				sRemoteSize="`echo $sRemoteSize | awk '{ print $1 }'`"
+				# if [ $sLocalSize -eq $sRemoteSize ]; then
 					# break
 				# fi
 			done
@@ -203,19 +195,19 @@ fnListing() {
 			for ((i = 3; i >= 1; i -= 1)); do
 				case "$Type" in
 					'directory')
-						lftp -e "$LftpOptions mkdir -p \"$sDstDir/$sGetNameEscaped\"; mirror -R \"$sGetBasePath\" \"$sDstDir/$sGetNameEscaped\"; bye" -u "$DstUser","$DstPass" "$DstSrv" -p "$DstPort"
+						lftp -e "$LftpOptions mkdir -p \"$sDstDir\"; mirror -c -R \"$sGetBasePath\" \"$sDstDir\"; bye" -u "$RemoteUser","$RemotePass" "$RemoteSrv" -p "$RemotePort"
 						nError=$?
 						# Check remote size
-						#sRemoteSize="`lftp -e "$LftpOptions du -hs \"$sDstDir/$sGetNameEscaped\"; bye" -u "$DstUser","$DstPass" "$DstSrv" -p "$DstPort"`"
+						sRemoteSize="`lftp -e "$LftpOptions du -hs \"$sRemoteDestination\"; bye" -u "$RemoteUser","$RemotePass" "$RemoteSrv" -p "$RemotePort"`"
 					;;
 					*)
-						lftp -e "$LftpOptions mkdir -p $sDstDir; put -O \"$sDstDir\" \"$sGetBasePath\"; bye" -u "$DstUser","$DstPass" "$DstSrv" -p "$DstPort"
+						lftp -e "$LftpOptions mkdir -p $sDstDir; put -c -O \"$sDstDir\" \"$sGetBasePath\"; bye" -u "$RemoteUser","$RemotePass" "$RemoteSrv" -p "$RemotePort"
 						nError=$?
 						# Check remote size
-						#sRemoteSize="`lftp -e "$LftpOptions du -hs \"$sDstDir\"; bye" -u "$DstUser","$DstPass" "$DstSrv" -p "$DstPort"`"
+						sRemoteSize="`lftp -e "$LftpOptions du -hs \"$sRemoteDestination\"; bye" -u "$RemoteUser","$RemotePass" "$RemoteSrv" -p "$RemotePort"`"
 					;;
 				esac
-				#sRemoteSize="`echo $sRemoteSize | awk '{ print $1 }'`"
+				sRemoteSize="`echo $sRemoteSize | awk '{ print $1 }'`"
 			done
 		;;
 		'no_such_file_or_directory')	echo $FnCheck;;
@@ -238,7 +230,7 @@ fnListing() {
 
 	echo
 	echo "--------------------"
-	#echo "Size:		$sRemoteSize (remote)"
+	echo "Size:		$sRemoteSize (remote)"
 	echo "Date:		$FnEndDate"
 	echo "Hour:		$FnEndHour"
 	echo "##### END #####"
@@ -265,11 +257,11 @@ for ROW in $MyList; do
 	get_name="`echo "$ROW" | awk '{split($0,a,"|"); print a[5]}'`"
 	get_loaded_file="`echo "$ROW" | awk '{split($0,a,"|"); print a[6]}'`"
 
-	if [ ! -z "$DstDir" ] \
-		&& [ ! -z "$DstSrv" ] \
-		&& [ ! -z "$DstPort" ] \
-		&& [ ! -z "$DstUser" ] \
-		&& [ ! -z "$DstPass" ] \
+	if [ ! -z "$RemoteDir" ] \
+		&& [ ! -z "$RemoteSrv" ] \
+		&& [ ! -z "$RemotePort" ] \
+		&& [ ! -z "$RemoteUser" ] \
+		&& [ ! -z "$RemotePass" ] \
 		&& [ ! -z "$MailObjectOK" ] \
 		&& [ ! -z "$MailObjectKO" ]; then
 
