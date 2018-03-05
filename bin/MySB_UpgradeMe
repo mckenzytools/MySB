@@ -148,14 +148,14 @@ if [ $Continue -eq 0 ]; then
 	[ $gbDevMode -eq 1 ] && backup-manager-tools remove "$MySB_InstallDir"
 	if [ "$gbIsInstalled_PlexPy" == "YES" ]; then
 		mkdir -p /tmp/PlexPy
-		rsync -av /opt/plexpy/plexpy.db /tmp/PlexPy/plexpy.db
-		rsync -av /opt/plexpy/backups /tmp/PlexPy/
-		rsync -av /opt/plexpy/logs /tmp/PlexPy/
+		rsync -a /opt/plexpy/plexpy.db /tmp/PlexPy/plexpy.db
+		rsync -a /opt/plexpy/backups /tmp/PlexPy/
+		rsync -a /opt/plexpy/logs /tmp/PlexPy/
 		backup-manager-tools add "/tmp/PlexPy"
 	fi
 	if [ "$gbIsInstalled_PlexMedia" == "YES" ]; then
 		mkdir -p /tmp/PlexMedia
-		rsync -av "/var/lib/plexmediaserver/Library/Application\ Support/Plex\ Media\ Server/Plug-in\ Support/" /tmp/PlexMedia/
+		rsync -a /var/lib/plexmediaserver/Library/Application\ Support/Plex\ Media\ Server/Plug-in\ Support/ /tmp/PlexMedia/
 		backup-manager-tools add "/tmp/PlexMedia"
 	fi
 	backup-manager -v -c /etc/MySB/BM_MySB.conf
