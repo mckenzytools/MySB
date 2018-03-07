@@ -30,7 +30,7 @@ sLocSwitch="$1"
 #### FUNCTIONs
 # Install DEB package
 fnInstallDebPackage() {
-	sPlexMediaVersion="1.11.3.4803-c40bba82e"
+	sPlexMediaVersion="1.12.0.4829-6de959918"
 	case `getconf LONG_BIT` in
 		64)	sPlexDeb="plexmediaserver_${sPlexMediaVersion}_amd64.deb";;
 		*)	sPlexDeb="plexmediaserver_${sPlexMediaVersion}_i386.deb";;
