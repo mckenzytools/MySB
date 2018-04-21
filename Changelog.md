@@ -6,8 +6,9 @@
 			- RKHunter v1.4.6
 			- Certbot-auto script v0.22.2
 			- PlexMedia v1.12.3.4973
-			- Tautulli v2.0.2, PlexPy is renamed, repo moved to https://github.com/Tautulli/Tautulli
+			- Tautulli v2.0.28, PlexPy is renamed, repo moved to https://github.com/Tautulli/Tautulli
 			- PlexMedia, add deb file for x86_64 and increased frequency of update verification
+			- PlexMedia & Tautulli, daily check for new version and install it if needed
 			- Use of Git LFS with a second Git repo
 			- Remove rTorrent incomplete directory
 			- Remove Debian Wheezy possibilities
