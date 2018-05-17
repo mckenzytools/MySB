@@ -90,18 +90,21 @@ gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/SourcesList" 'INSTALL'
 gfnStatusSTD
 
 #### Packages
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_NeededPackages$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/Packages" 'INSTALL'
 gfnStatusSTD
 
 #### SSH
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring SSH$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/SSH" 'INSTALL'
 gfnStatusSTD
 
 #### Getting information about OVH monitoring engine
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_ProviderInfos$CEND..."
 case "$gsServerProvider" in
@@ -113,24 +116,28 @@ case "$gsServerProvider" in
 esac
 
 #### Tweaks
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_Optimiszation$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/Tweaks" 'INSTALL'
 gfnStatusSTD
 
 #### CPAN
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_CPAN$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/CPAN" 'INSTALL'
 gfnStatusSTD
 
 #### Quota
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_Quota$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/Quota" 'INSTALL'
 gfnStatusSTD
 
 #### DownloadAll
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_DownloadAll$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/DownloadAll" 'INSTALL'
@@ -145,60 +152,70 @@ if [ -f $MySB_InstallDir/temp/continue ]; then
 fi
 
 #### CA & Client Certificate
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_CertificateAuthority$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/Certificates" 'CreateCACertificate' 'INSTALL'
 gfnStatusSTD
 
 #### PHP
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring PHP5$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/PHP" 'INSTALL'
 gfnStatusSTD
 
 #### Tools
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_Tools$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/Tools" 'INSTALL'
 gfnStatusSTD
 
 #### Nginx
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring NginX$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/Nginx" 'INSTALL'
 gfnStatusSTD
 
 #### Let's Encrypt
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_LetsEncrypt$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/LetsEncrypt" 'INSTALL'
 gfnStatusSTD
 
 #### VSFTP
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring VSFTPd$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/VSFTP" 'INSTALL'
 gfnStatusSTD
 
 #### Postfix
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring Postfix$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/Postfix" 'INSTALL'
 gfnStatusSTD
 
 #### Backup Manager
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring Backup Manager$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/BackupManager" 'INSTALL'
 gfnStatusSTD
 
 #### Shell In a Box
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring Shell In a Box$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/ShellInABox" 'INSTALL'
 gfnStatusSTD
 
 #### Bind
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring BIND$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/Bind" 'INSTALL'
@@ -223,18 +240,21 @@ echo
 echo -e "$MySB_Title_InstallServices"
 
 #### rTorrent
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring rTorrent$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/rTorrent" 'INSTALL'
 gfnStatusSTD
 
 #### ruTorrent
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_ruTorrent$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/ruTorrent" 'INSTALL'
 gfnStatusSTD
 
 #### SeedboxManager
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring Seedbox-Manager$CEND..."
 if [ "$gbToInstall_Manager" == "YES" ]; then
@@ -245,6 +265,7 @@ else
 fi
 
 #### CakeboxLight
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring CakeBox-Light$CEND..."
 if [ "$gbToInstall_Cakebox" == "YES" ]; then
@@ -255,12 +276,14 @@ else
 fi
 
 #### LoadAvg
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring LoadAvg$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/LoadAvg" 'INSTALL'
 gfnStatusSTD
 
 #### OpenVPN
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring OpenVPN$CEND..."
 if [ "$gbToInstall_OpenVPN" == "YES" ]; then
@@ -271,6 +294,7 @@ else
 fi
 
 #### Samba
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring Samba$CEND..."
 if [ "$gbToInstall_OpenVPN" == "YES" ]; then
@@ -281,6 +305,7 @@ else
 fi
 
 #### NFS
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring NFS$CEND..."
 if [ "$gbToInstall_OpenVPN" == "YES" ]; then
@@ -291,6 +316,7 @@ else
 fi
 
 #### Logwatch
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring Logwatch$CEND..."
 if [ "$gbToInstall_LogWatch" == "YES" ]; then
@@ -301,6 +327,7 @@ else
 fi
 
 ### PlexMedia
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring PlexMedia$CEND..."
 if [ "$gbToInstall_PlexMedia" == "YES" ]; then
@@ -311,6 +338,7 @@ else
 fi
 
 ### NextCloud
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring NextCloud$CEND..."
 if [ "$gbToInstall_NextCloud" == "YES" ]; then
@@ -321,6 +349,7 @@ else
 fi
 
 #### Webmin
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring Webmin$CEND..."
 if [ "$gbToInstall_Webmin" == "YES" ]; then
@@ -341,12 +370,14 @@ echo
 echo -e "$MySB_Title_SecurityRules"
 
 #### RKHunter
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring RKhunter$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/RKHunter" 'INSTALL'
 gfnStatusSTD
 
 #### Fail2Ban
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring Fail2Ban$CEND..."
 if [ "$gbToInstall_Fail2Ban" == "YES" ]; then
@@ -357,6 +388,7 @@ else
 fi
 
 #### BlockList / PeerGuardian
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_rTorrentBlocklist$CEND..."
 if [ "$gsMySB_PeerBlock" == "PeerGuardian" ] || [ "$gsMySB_PeerBlock" == "rTorrent" ]; then
@@ -365,6 +397,7 @@ if [ "$gsMySB_PeerBlock" == "PeerGuardian" ] || [ "$gsMySB_PeerBlock" == "rTorre
 else
 	echo -e "$Global_NothingToDo"
 fi
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_PeerGuardian$CEND..."
 if [ "$gsMySB_PeerBlock" == "PeerGuardian" ]; then
@@ -375,6 +408,7 @@ else
 fi
 
 ### DNScrypt-proxy
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring DNScrypt-proxy $LongTime$CEND..."
 if [ "$gbToInstall_DNScrypt" == "YES" ]; then
@@ -397,24 +431,28 @@ fi
 #
 
 #### MySB_CreateUser
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo  -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_MainUser \"$gsMainUserName\"$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/bin/MySB_CreateUser" "$gsMainUserName" 'INSTALL'
 gfnStatusSTD
 
 #### Create final security rules
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $Global_FinalSecurityRules$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/bin/MySB_SecurityRules" 'create' 'INSTALL'
 gfnStatusSTD
 
 #### Modify rights and owner for directories and files
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $Global_OwnerAndRights$CEND..."
 gfnManageDirAndFiles 'global'
 gfnStatusSTD
 
 #### Cron
+[ -f $MySB_InstallDir/dev ] && read -p "Press enter to continue"
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_InstallingConfiguring Cron$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/Cron" 'INSTALL'
