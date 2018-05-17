@@ -89,13 +89,13 @@ if [ ! -f /etc/letsencrypt/live/$gsHostNameFqdn/fullchain.pem ]; then # Is it a 
 	fnFirewalling 'before'
 
 	# Params
-	sParams="certonly --authenticator standalone --verbose --update-registration --no-eff-email --agree-tos --rsa-key-size 2048 --email $gsMainUserEmail -d $gsHostNameFqdn"
+	sParams="certonly --authenticator standalone --verbose --update-registration --no-eff-email --agree-tos --rsa-key-size 2048 --email $gsMainUserEmail -d $gsHostNameFqdn "
 	# Dev mode ?
 	[ $gbDevMode -eq 1 ] && sParams="$sParams --test-cert"
 
 	cd $MySB_Files/
 	chmod +x certbot-auto
-	./certbot-auto $sParams
+	./certbot-auto $sParams --preferred-challenges=http --pre-hook "service nginx stop" --post-hook "service nginx start"
 
 	if [ -f /etc/letsencrypt/live/$gsHostNameFqdn/fullchain.pem ] && [ ! -h $MySB_InstallDir/ssl/fullchain.pem ]; then
 		ln -sv /etc/letsencrypt/live/$gsHostNameFqdn/fullchain.pem $MySB_InstallDir/ssl/fullchain.pem
@@ -141,7 +141,7 @@ else # Or is it a renew ?
 				fnFirewalling 'before'
 				cd $MySB_Files/
 				chmod +x certbot-auto
-				./certbot-auto renew
+				./certbot-auto renew --preferred-challenges=http --pre-hook "service nginx stop" --post-hook "service nginx start"
 				dNewEndDate="`openssl x509 -in /etc/letsencrypt/live/$gsHostNameFqdn/cert.pem -noout -dates | grep 'notAfter'  | cut -d "=" -f 2`"
 				[ "$dNewEndDate" != "$dEndDate" ] && fnNextRenewal
 				fnFirewalling 'after'
