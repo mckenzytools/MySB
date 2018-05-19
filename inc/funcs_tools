@@ -150,9 +150,9 @@ gfnCheckFQDN() {
 	# nReturn = 3: FQDN coresponding to public IP address but FQDN not corresponding to local IP address
 	nReturn=1
 
-	if [ "`host -N 0 "$gsHostNameFqdn" > /dev/null 2>&1; echo $?`" -eq 0 ]; then
-		sHostResult="`host -N 0 "$gsHostNameFqdn" | awk '{ print $4 }'`"
-		sPingResult="`ping -q -c 1 "$gsHostNameFqdn" | head -n 1 | awk '{ print $3 }' | sed 's/(//g;' | sed 's/)//g;'`"
+	if [ "`host -N 0 "$sHostname" > /dev/null 2>&1; echo $?`" -eq 0 ]; then
+		sHostResult="`host -N 0 "$sHostname" | awk '{ print $4 }'`"
+		sPingResult="`ping -q -c 1 "$sHostname" | head -n 1 | awk '{ print $3 }' | sed 's/(//g;' | sed 's/)//g;'`"
 
 		if [ "$gsSrvIpAddress" == "$gsSrvIpAddressExt" ]; then
 			#### Case Not behind a firewall (Public IP address)
