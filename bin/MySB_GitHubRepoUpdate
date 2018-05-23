@@ -68,6 +68,9 @@ if [ "$gbIsInstalled_PlexMedia" == "YES" ]; then
 	screen -dmS Plexmedia_CheckUpgrade $MySB_InstallDir/install/PlexMedia CRON;
 fi
 
+#### Flush mail queue
+if gfnCheckCommand 0 postfix && gfnGetPid postfix; then postfix flush; fi
+
 # -----------------------------------------
 source $(dirname $0)/../inc/includes_after
 # -----------------------------------------
