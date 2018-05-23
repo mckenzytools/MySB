@@ -88,7 +88,8 @@ gfnGetPid() {
 		"pglcmd")	sPid="`pidof pgld`";;
 		"bind9")	sPid="`pidof named`";;
 		"mysql")	sPid="`pidof mysqld`";;
-		*)			sPid="`pidof $1`";;
+		"postfix")	sPid="`pidof master`";;
+		*)		sPid="`pidof $1`";;
 	esac
 
 	if [ ! -z "$sPid" ]; then
