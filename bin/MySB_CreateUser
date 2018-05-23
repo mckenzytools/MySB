@@ -134,9 +134,12 @@ case "$UserAccountType" in
 
 		#### add to groups
 		log_daemon_msg "$CreateUser_AssignGroup [$UserToCreate]"
-		addgroup $UserToCreate MySB_users &> /dev/null
-		[ "$UserSUDO" == "YES" ] && addgroup $UserToCreate sudo &> /dev/null
-		[ "$UserSFTP" == "YES" ] && addgroup $UserToCreate sshdusers &> /dev/null
+		[ -z "`grep 'sudo' /etc/group`" ] && groupadd -f sudo
+		[ -z "`grep 'sshdusers' /etc/group`" ] && groupadd -f sshdusers
+		[ -z "`grep 'MySB_users' /etc/group`" ] && groupadd -f MySB_users
+		[ "$UserSUDO" == "YES" ] && usermod -a -G sudo $UserToCreate
+		[ "$UserSFTP" == "YES" ] && usermod -a -G sshdusers $UserToCreate
+		usermod -a -G MySB_users $UserToCreate
 		gfnStatusLSB
 
 		#### custumize profile

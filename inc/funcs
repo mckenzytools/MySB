@@ -293,6 +293,7 @@ gfnManageServices() {
                                         log_daemon_msg "$Funcs_Restarting $Service"
                                         service $Service restart > /dev/null
                                     fi
+                                    gfnStatusLSB
 								fi
 							;;
 							# "php7.0-fpm"|"php5-fpm"|"stunnel4"|"postfix"|"cron"|"vsftpd"|"nfs-kernel-server"|"mysql"|"tautulli"|"plexmediaserver"|rtorrent-*)

@@ -41,22 +41,18 @@ if [ -f /etc/ssh/sshd_config.orig ]; then
 fi
 
 # Groups
-[ -z "`grep 'sudo' /etc/group`" ] && groupadd -f sudo
+groupadd -f sudo
 grep 'sudo' /etc/group
-[ -z "`grep 'sshdusers' /etc/group`" ] && groupadd -f sshdusers
+groupadd -f sshdusers
 grep 'sshdusers' /etc/group
-[ -z "`grep 'MySB_users' /etc/group`" ] && groupadd -f MySB_users
+groupadd -f MySB_users
 grep 'MySB_users' /etc/group
+usermod -a -G sshdusers root
 
-if [ ! -d /usr/share/terminfo/l/ ]; then
-	mkdir -pv /usr/share/terminfo/l/
-fi
+mkdir -pv /usr/share/terminfo/l/
 cp /lib/terminfo/l/linux /usr/share/terminfo/l/
 
-if [ ! -d /home/MySB_share ]; then
-	mkdir -v /home/MySB_share
-fi
-
+mkdir -pv /home/MySB_share
 chown -v root:MySB_users /home/MySB_share
 chmod -v 770 /home/MySB_share
 
