@@ -36,29 +36,21 @@ fi
 
 install -v -o root -g root -m 0644 $MySB_InstallDir/templates/other/etc.ssh.sshd_config.tmpl /etc/ssh/sshd_config
 perl -pi -e "s/<port_ssh>/$gsPort_SSH/g" /etc/ssh/sshd_config
-if [ -f /etc/ssh/sshd_config.orig ]; then
-	rm -vf /etc/ssh/sshd_config.orig
-fi
+rm -vf /etc/ssh/sshd_config.orig
 
 # Groups
-[ -z "`grep 'sudo' /etc/group`" ] && groupadd -f sudo
+groupadd -f sudo
 grep 'sudo' /etc/group
-[ -z "`grep 'sshdusers' /etc/group`" ] && groupadd -f sshdusers
+groupadd -f sshdusers
 grep 'sshdusers' /etc/group
-[ -z "`grep 'MySB_users' /etc/group`" ] && groupadd -f MySB_users
+groupadd -f MySB_users
 grep 'MySB_users' /etc/group
-if [ -z "`cat /etc/group | grep sshdusers | grep root`" ]; then
-	usermod -a -G sshdusers root
-fi
-if [ ! -d /usr/share/terminfo/l/ ]; then
-	mkdir -pv /usr/share/terminfo/l/
-fi
+usermod -a -G sshdusers root
+
+mkdir -pv /usr/share/terminfo/l/
 cp /lib/terminfo/l/linux /usr/share/terminfo/l/
 
-if [ ! -d /home/MySB_share ]; then
-	mkdir -v /home/MySB_share
-fi
-
+mkdir -pv /home/MySB_share
 chown -v root:MySB_users /home/MySB_share
 chmod -v 770 /home/MySB_share
 
