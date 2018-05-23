@@ -114,7 +114,7 @@ gfnSendMail() {
 	sleep 2
 
 	#### Flush mail queue
-	if gfnCheckCommand 0 postfix; then postfix flush; fi
+	if gfnCheckCommand 0 postfix && gfnGetPid postfix; then postfix flush; fi
 
 	if [ ! -z "$sInfo" ]; then gfnStatusLSB; fi
 }
