@@ -31,6 +31,8 @@ source $(dirname $0)/../inc/includes_before
 # https://raw.githubusercontent.com/cryptostorm/cstorm_deepDNS/master/dnscrypt-resolvers.csv
 # https://gist.githubusercontent.com/legendtang/db7265c5f5f82c9aed70/raw/5fc8bbc6d0acf7a0da5f5be7f5b7b7e243ec8931/dnscrypt-resolvers.csv
 # https://raw.githubusercontent.com/dyne/dnscrypt-proxy/master/dnscrypt-resolvers.csv
+# https://dnsrec.meo.ws/
+# https://dns.d0wn.biz/
 ######################################################################
 
 if [ "$USAGE" == "ON" ]; then
@@ -53,7 +55,7 @@ gnDNScryptUpgrade=0
 
 if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 	# Check packages to install
-	Packages='ldnsutils libldns-dev rng-tools haveged libsodium-dev'
+	Packages='ldnsutils libldns-dev rng-tools haveged libsodium18'
 	gfnPackageBundleInstall "$Packages"
 
 	# STOP services
@@ -64,6 +66,8 @@ if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 	nNumLine=$(cat /etc/default/rng-tools | grep '#HRNGDEVICE=/dev/null' -n -m 1 | cut -d ':' -f 1)
 	(( nNumLine++ ))
 	sed -i ""$nNumLine"i\HRNGDEVICE=/dev/urandom" /etc/default/rng-tools
+	systemctl daemon-reload
+	systemctl start rng-tools
 
 	# Switch to bind
 	gfnSwitchDNS "bind"
@@ -140,6 +144,13 @@ if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 	#### Logrotate
 	gfnLogRotate 'dnscrypt-proxy'
 
+	#### Copy some files
+	[ ! -d /usr/local/share/dnscrypt-proxy ] && mkdir -pv /usr/local/share/dnscrypt-proxy
+	install -v -o root -g root -m 0644 $MySB_InstallDir/files/dnscrypt-resolvers/dnscrypt-resolvers.csv /usr/local/share/dnscrypt-proxy/dnscrypt-resolvers.csv
+	install -v -o root -g root -m 0644 $MySB_InstallDir/files/dnscrypt-resolvers/dnscrypt-resolvers.csv.minisig /usr/local/share/dnscrypt-proxy/dnscrypt-resolvers.csv.minisig
+	install -v -o root -g root -m 0644 $MySB_InstallDir/files/dnscrypt-resolvers/minisign.pub /usr/local/share/dnscrypt-proxy/minisign.pub
+	unix2dos /usr/local/share/dnscrypt-proxy/dnscrypt-resolvers.csv
+
 	#### Opening ports for PeerGuardian
 	if gfnCheckCommand 0 pgld; then
 		# Perform a small update to add resolvers in database for PeerGuardian
@@ -148,11 +159,6 @@ if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 		gfnScriptInvoke 'source' "$MySB_InstallDir/bin/MySB_SecurityRules" 'create'
 	fi
 	cmdMySQL 'MySB_db' "UPDATE system SET dnscrypt='1' WHERE id_system='1';" -v
-
-	#### Copy some files
-	[ ! -d /usr/local/share/dnscrypt-proxy ] && mkdir -pv /usr/local/share/dnscrypt-proxy
-	install -v -o root -g root -m 0644 $MySB_InstallDir/files/dnscrypt-resolvers.csv /usr/local/share/dnscrypt-proxy/dnscrypt-resolvers.csv
-	install -v -o root -g root -m 0644 $MySB_InstallDir/files/dnscrypt-resolvers.csv.minisig /usr/local/share/dnscrypt-proxy/dnscrypt-resolvers.csv.minisig
 
 	#### START services & Update resolvers infos in db
 	if [ $bDoFullUpdate -eq 1 ]; then
@@ -170,7 +176,7 @@ if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 		ping -c5 github.com
 	fi
 
-	#### Check procese
+	#### Check process
 	service dnscrypt-proxy status-details
 
 	#### Check if service is OK and running
@@ -178,7 +184,7 @@ if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 		#Wait a moment for DNScrypt to start
 		sleep 5
 		if ! gfnGetPid dnscrypt-proxy; then
-			service dnscrypt-proxy status | tee -a $MySB_InstallDir/temp/continue
+			systemctl status dnscrypt-proxy | tee -a $MySB_InstallDir/temp/continue
 		fi
 	fi
 fi

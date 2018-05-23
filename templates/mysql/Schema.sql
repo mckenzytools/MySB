@@ -58,11 +58,9 @@ CREATE TABLE IF NOT EXISTS `dnscrypt_config` (
   `ip_version` varchar(4) NOT NULL DEFAULT 'ipv4',
   `processes_qty` tinyint(1) NOT NULL DEFAULT '6',
   `no_logs` varchar(3) NOT NULL DEFAULT 'yes',
-  `dnssec` varchar(3) NOT NULL DEFAULT 'no',
+  `dnssec` varchar(3) NOT NULL DEFAULT 'yes',
   `namecoin` varchar(3) NOT NULL DEFAULT 'no',
   `random` varchar(3) NOT NULL DEFAULT 'no',
-  `sig_key` varchar(128) NOT NULL DEFAULT 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3',
-  `csv_url` varchar(128) NOT NULL DEFAULT 'https://download.dnscrypt.org/dnscrypt-proxy/dnscrypt-resolvers.csv',
   PRIMARY KEY (`id_dnscrypt_config`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ;
 -- --------------------------------------------------------

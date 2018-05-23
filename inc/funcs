@@ -276,32 +276,44 @@ gfnManageServices() {
 						nContinue=1
 
 						case "$Service" in
-							"dnscrypt-proxy")
+							"dnscrypt-proxy"|"webmin")
 								if gfnGetPid $Service; then
 									sFinalCmd="restart"
 								else
 									sFinalCmd="start"
 								fi
 							;;
-							"webmin")
-								if gfnGetPid $Service; then
-									sFinalCmd="restart"
-								else
-									sFinalCmd="start"
-								fi
-							;;
-							"fail2ban")
+                            "tautulli"|"php5-fpm"|"stunnel4"|"postfix"|"cron"|"vsftpd"|"nfs-kernel-server"|"mysql"|"plexmediaserver"|"fail2ban"|rtorrent-*)
 								nContinue=0
-								if ! gfnGetPid $Service; then
-									log_daemon_msg "$Funcs_Starting $Service"
-									service $Service start > /dev/null
-								else
-									log_daemon_msg "$Funcs_Restarting $Service"
-									service $Service restart > /dev/null
+								if gfnCheckCommand 0 $Service; then
+                                    if ! gfnGetPid $Service; then
+                                        log_daemon_msg "$Funcs_Starting $Service"
+                                        service $Service start > /dev/null
+                                    else
+                                        log_daemon_msg "$Funcs_Restarting $Service"
+                                        service $Service restart > /dev/null
+                                    fi
 								fi
-								gfnStatusLSB
 							;;
-							"php7.0-fpm"|"php5-fpm"|"stunnel4"|"postfix"|"cron"|"vsftpd"|"nfs-kernel-server"|"mysql"|"tautulli"|"plexmediaserver"|rtorrent-*)
+							# "php7.0-fpm"|"php5-fpm"|"stunnel4"|"postfix"|"cron"|"vsftpd"|"nfs-kernel-server"|"mysql"|"tautulli"|"plexmediaserver"|rtorrent-*)
+								# nContinue=0
+								# if gfnCheckCommand 0 $Service; then
+									# if ! gfnGetPid $Service; then
+										# log_daemon_msg "$Funcs_Starting $Service"
+										# service $Service start > /dev/null
+									# else
+										# log_daemon_msg "$Funcs_Reloading $Service"
+										# service $Service $sFinalCmd > /dev/null
+										# if [ $? -gt 0 ]; then
+											# gfnStatusLSB 1
+											# log_daemon_msg "$Funcs_Restarting $Service"
+											# service $Service restart > /dev/null
+										# fi
+									# fi
+									# gfnStatusLSB
+								# fi
+							# ;;
+							"bind9")
 								nContinue=0
 								if gfnCheckCommand 0 $Service; then
 									if ! gfnGetPid $Service; then
@@ -310,7 +322,7 @@ gfnManageServices() {
 									else
 										log_daemon_msg "$Funcs_Reloading $Service"
 										service $Service $sFinalCmd > /dev/null
-										if [ $? -gt 0 ]; then
+										if [ -z "`ps ax | grep 'named -f -u bind' | grep -v 'grep'`" ]; then
 											gfnStatusLSB 1
 											log_daemon_msg "$Funcs_Restarting $Service"
 											service $Service restart > /dev/null
@@ -349,24 +361,6 @@ gfnManageServices() {
 									gfnStatusLSB
 								fi
 							;;
-							"bind9")
-								nContinue=0
-								if gfnCheckCommand 0 $Service; then
-									if ! gfnGetPid $Service; then
-										log_daemon_msg "$Funcs_Starting $Service"
-										service $Service start > /dev/null
-									else
-										log_daemon_msg "$Funcs_Reloading $Service"
-										service $Service $sFinalCmd > /dev/null
-										if [ -z "`ps ax | grep 'named -u bind' | grep -v 'grep'`" ]; then
-											gfnStatusLSB 1
-											log_daemon_msg "$Funcs_Restarting $Service"
-											service $Service restart > /dev/null
-										fi
-									fi
-									gfnStatusLSB
-								fi
-							;;
 							*)
 								if ! gfnGetPid $Service; then
 									sFinalCmd="start"
@@ -377,10 +371,14 @@ gfnManageServices() {
 						esac
 
 						if [ "$nContinue" == "1" ]; then
-							service $Service $sFinalCmd
+							log_daemon_msg "$Funcs_Starting $Service"
+							service $Service $sFinalCmd &> /dev/null
+							gfnStatusLSB
 
 							if [ $? -gt 0 ] && [ "$sFinalCmd" == "reload" ]; then
-								service $Service restart
+								log_daemon_msg "$Funcs_Restarting $Service"
+								service $Service restart &> /dev/null
+								gfnStatusLSB
 							fi
 						fi
 					fi
