@@ -139,7 +139,7 @@ fi
 #### 8 - Reboot after an install or an upgrade
 if [ "$REBOOT" == "YES" ]; then
 	#### Flush mail queue
-	if gfnCheckCommand 0 postfix; then postfix flush; fi
+	if gfnCheckCommand 0 postfix && gfnGetPid postfix; then postfix flush; fi
 	#### Update CA certificates
 	update-ca-certificates --fresh &> /dev/null
 
