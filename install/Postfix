@@ -187,7 +187,7 @@ if [ "$gsSwitch" == "INSTALL" ] || [ "$gsSwitch" == "UPGRADE" ]; then
 fi
 
 #### Flush mail queue
-if gfnCheckCommand 0 postfix; then postfix flush; fi
+if gfnCheckCommand 0 postfix && gfnGetPid postfix; then postfix flush; fi
 
 # -----------------------------------------
 source $(dirname $0)/../inc/includes_after
