@@ -23,6 +23,17 @@
 funcs_tools=1
 ##################### FIRST LINE #####################################
 
+#### Quota, space available
+gfnQuotaSpaceAvailable() {
+    local nFreeSpaceToKeep nFreeSpace
+
+    nFreeSpaceToKeep="`python3 -c "print(2 * 1024**2)"`" # Keep a minimum of 2Go of free space (Kb)
+    nFreeSpace="`df --sync /home/ | awk '{ print $2 }' | tail -n 1`" # (Kb)
+    nFreeSpace=$(($nFreeSpace-$nFreeSpaceToKeep)) # (Kb)
+
+    echo $nFreeSpace
+}
+
 #### Statistics
 gfnStatistics() {
 	# No credentials are retained !

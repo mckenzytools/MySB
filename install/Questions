@@ -57,7 +57,7 @@ case "$TYPE" in
 esac
 
 DisplaySurvey() {
-	local nLoop sValue sIp bToInstall sValueProto sUdpPortsList sTcpPortsList sTempIPs sCheckIp nFreeSpace nFreeSpaceToKeep sHostName sTmp sQuestion
+	local nLoop sValue sIp bToInstall sValueProto sUdpPortsList sTcpPortsList sTempIPs sCheckIp nFreeSpace sHostName sTmp sQuestion
 
 	# New page
 	if [ $FirstTime -eq 0 ]; then
@@ -731,9 +731,7 @@ DisplaySurvey() {
 		else
 			sValue="0"
 		fi
-		nFreeSpace="`df --sync /home/ | awk '{ print $2 }' | tail -n 1`"
-		nFreeSpaceToKeep="`python3 -c "(print 2 * 1024**2)"`" # Keep a minimum of 2Go of free space
-		nFreeSpace=$(($nFreeSpace-$nFreeSpaceToKeep))
+        nFreeSpace=$(gfnQuotaSpaceAvailable)
 		cmdMySQL 'MySB_db' "UPDATE system SET hostname='$gsHostNameFqdn', ipv4='$gsSrvIpAddress', ipv4_ext='$gsSrvIpAddressExt', ipv4_additional='$gsSrvAdditionnalIpAddresses' , primary_inet='$gsPrimaryInet', timezone='$gsTimeZone', server_provider='$gsServerProvider', ip_restriction='$sValue', quota_default='$nFreeSpace' WHERE id_system='1';" -v >> $gsLogFile
 
 		# 'smtp' table

@@ -66,7 +66,7 @@ gfnNextCloudAccountManage() {
 
 #### Quota
 gfnManageQuota() {
-	local sMessage nFreeSpace nUsersSpaceUsed nHomeSpace nNextCloudSpace nFreeSpaceToKeep nSpaceByUser sIfExist sUser sVerbose
+	local sMessage nFreeSpace nUsersSpaceUsed nHomeSpace nNextCloudSpace nSpaceByUser sIfExist sUser sVerbose
 	sMessage=""
 	sVerbose=""
 	case `getconf LONG_BIT` in
@@ -83,29 +83,9 @@ gfnManageQuota() {
 	fi
 	nFreeSpace="`cmdMySQL 'MySB_db' "SELECT quota_default FROM system WHERE id_system='1';"`"
 
-	# By default, force disabling quota for all users
-	# for sUser in $gsUsersList; do
-		# cmdMySQL 'MySB_db' "UPDATE users SET quota='0' WHERE users_ident='$sUser';" $sVerbose
-		# setquota -u -F $sVFSV $sUser 0 0 0 0 -a
-	# done
-
 	# Setting default quota
 	if [ -z "$nFreeSpace" ] || [ "$nFreeSpace" == 'NULL' ] || [ $nFreeSpace -eq 0 ]; then
-		nUsersSpaceUsed=0
-		for sUser in $gsUsersList; do
-			if [ -d /home/$sUser/ ]; then
-				nHomeSpace="`du -s /home/$sUser/ | awk '{ print $1 }'`" # (Kb)
-				nUsersSpaceUsed=$(($nUsersSpaceUsed+$nHomeSpace))
-			fi
-			if [ -d /home/nextcloud/$sUser/ ]; then
-				nNextCloudSpace="`du -s /home/nextcloud/$sUser/ | awk '{ print $1 }'`" # (Kb)
-				nUsersSpaceUsed=$(($nUsersSpaceUsed+$nNextCloudSpace))
-			fi
-		done
-		nFreeSpaceToKeep="`python3 -c "print(2 * 1024**2)"`" # Keep a minimum of 2Go of free space (Kb)
-		nFreeSpace="`df --sync /home/ | awk '{ print $2 }' | tail -n 1`" # (Kb)
-		nFreeSpace=$(($nFreeSpace-$nFreeSpaceToKeep)) # (Kb)
-		#nFreeSpace=$(($nFreeSpace+$nUsersSpaceUsed)) # (Kb)
+        nFreeSpace=$(gfnQuotaSpaceAvailable)
 		cmdMySQL 'MySB_db' "UPDATE system SET quota_default='$nFreeSpace' WHERE id_system='1';" $sVerbose
 	fi
 
@@ -120,8 +100,6 @@ gfnManageQuota() {
 			nNextCloudSpace="`du -s /home/nextcloud/$sUser/ | awk '{ print $1 }'`" # (Kb)
 			nUsersSpaceUsed=$(($nUsersSpaceUsed+$nNextCloudSpace))
 		fi
-
-
 	done
 
 	# Setting quota and calculate space used for each users
