@@ -98,6 +98,12 @@ case "$1" in
 		perl -pi -e "s/<MySB_InstallDir>/$gsInstallDirEscaped/g" /etc/nginx/locations/NextCloud.conf
 		# rtorrent
 		rm -fv /usr/local/bin/rtorrent
+
+		#### Quota
+		nFreeSpaceToKeep="`python3 -c "print(2 * 1024**2)"`" # Keep a minimum of 2Go of free space (Kb)
+		nFreeSpace="`df --sync /home/ | awk '{ print $2 }' | tail -n 1`" # (Kb)
+		nFreeSpace=$(($nFreeSpace-$nFreeSpaceToKeep)) # (Kb)
+		cmdMySQL 'MySB_db' "UPDATE system SET quota_default='$nFreeSpace' WHERE id_system='1';" $sVerbose
 	;;
 	"AFTER")
 		####################################

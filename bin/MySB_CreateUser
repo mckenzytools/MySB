@@ -64,12 +64,13 @@ else
 			UserAccountType="normal"
 			LocSwitch="$2"
 		;;
-		*)			# APPLYCONFIG (user sftp sudo email LocSwitch), user created by Web
+		*)			# APPLYCONFIG (user sftp sudo email LocSwitch), user created with the portal
 			UserSFTP=$2
 			UserSUDO=$3
 			UserEmail="$4"
 			UserAccountType="$5"
 			LocSwitch="$6"
+            Quota="$7" # (in Gb)
 			NewUserPassword="`gfnGenPassword 8`"
 		;;
 	esac
@@ -90,10 +91,11 @@ rTorrentPort=$LastPort
 #### user infos
 if [ "$UserToCreate" != "$gsMainUserName" ]; then
 	log_daemon_msg "$CreateUser_InsertInfoDB [$UserToCreate]"
-	cmdMySQL 'MySB_db' "INSERT INTO users (users_ident,users_email,users_passwd,rpc,sftp,sudo,scgi_port,rtorrent_port,home_dir,language,account_type) VALUES ('$UserToCreate','$UserEmail','$NewUserPassword','$NEWRPC','$UserSFTP','$UserSUDO','$ScgiPort','$rTorrentPort','$NewUserHomedir','$EnvLang','$UserAccountType');"
+	cmdMySQL 'MySB_db' "INSERT INTO users (users_ident,users_email,users_passwd,rpc,sftp,sudo,scgi_port,rtorrent_port,home_dir,language,quota,account_type) VALUES ('$UserToCreate','$UserEmail','$NewUserPassword','$NEWRPC','$UserSFTP','$UserSUDO','$ScgiPort','$rTorrentPort','$NewUserHomedir','$EnvLang','$Quota','$UserAccountType');"
 else
+    Quota="0"
 	log_daemon_msg "$CreateUser_UpdateInfoDB [$UserToCreate]"
-	cmdMySQL 'MySB_db' "UPDATE users SET users_passwd='', rpc='$NEWRPC', scgi_port='$ScgiPort', rtorrent_port='$rTorrentPort', home_dir='$NewUserHomedir' WHERE users_ident='$UserToCreate';"
+	cmdMySQL 'MySB_db' "UPDATE users SET users_passwd='', rpc='$NEWRPC', scgi_port='$ScgiPort', rtorrent_port='$rTorrentPort', home_dir='$NewUserHomedir', quota='$Quota' WHERE users_ident='$UserToCreate';"
 fi
 gfnListCountUsers
 gfnStatusLSB
@@ -134,15 +136,12 @@ case "$UserAccountType" in
 
 		#### add to groups
 		log_daemon_msg "$CreateUser_AssignGroup [$UserToCreate]"
-		# [ "$UserSUDO" == "YES" ] && usermod -a -G sudo $UserToCreate &> /dev/null
-		# [ "$UserSFTP" == "YES" ] && usermod -a -G sshdusers $UserToCreate &> /dev/null
-		# usermod -a -G MySB_users $UserToCreate &> /dev/null
-		[ -z "`grep 'sudo' /etc/group`" ] && groupadd -f sudo
-		[ -z "`grep 'sshdusers' /etc/group`" ] && groupadd -f sshdusers
-		[ -z "`grep 'MySB_users' /etc/group`" ] && groupadd -f MySB_users
-		[ "$UserSUDO" == "YES" ] && usermod -a -G sudo $UserToCreate
-		[ "$UserSFTP" == "YES" ] && usermod -a -G sshdusers $UserToCreate
-		usermod -a -G MySB_users $UserToCreate
+		[ -z "`grep 'sudo' /etc/group`" ] && groupadd -f sudo &> /dev/null
+		[ -z "`grep 'sshdusers' /etc/group`" ] && groupadd -f sshdusers &> /dev/null
+		[ -z "`grep 'MySB_users' /etc/group`" ] && groupadd -f MySB_users &> /dev/null
+		[ "$UserSUDO" == "YES" ] && usermod -a -G sudo $UserToCreate &> /dev/null
+		[ "$UserSFTP" == "YES" ] && usermod -a -G sshdusers $UserToCreate &> /dev/null
+		usermod -a -G MySB_users $UserToCreate &> /dev/null
 		gfnStatusLSB
 
 		#### custumize profile
@@ -159,7 +158,7 @@ case "$UserAccountType" in
 		fi
 
 		#### SSH Key
-		[ ! -f $NewUserHomedir/.ssh/id_rsa ] && ssh-keygen -q -t rsa -b 2048 -N "" -f $NewUserHomedir/.ssh/id_rsa -C "$UserToCreate@$gsHostNameFqdn"
+		[ ! -f $NewUserHomedir/.ssh/id_rsa ] && ssh-keygen -q -t rsa -b 2048 -N "" -f $NewUserHomedir/.ssh/id_rsa -C "$UserEmail"
 		[ ! -f $NewUserHomedir/.ssh/authorized_keys ] && touch $NewUserHomedir/.ssh/authorized_keys
 		chown root:$UserToCreate $NewUserHomedir/.ssh/*
 		chmod 0660 $NewUserHomedir/.ssh/*

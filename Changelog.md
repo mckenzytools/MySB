@@ -13,6 +13,13 @@
 			- PlexMedia & Tautulli, daily check for new version and install it if needed
 			- Portal
 				* Medoo Framework v1.5.6
+			- Quota
+				* Bug fix for calculate available space
+				* Add possibility to choice quota by users
+				* Add possibility to choice simple management for 'normal' users (total space / quantity of 'normal' users) ('plex' users or not included)
+			- Rental
+				* Add possibility to fix monthly
+				* Add possibility to add aditional price
 
 	Version v5.2
 		2018/03/24 (start at: 2018/01/18)
