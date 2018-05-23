@@ -257,6 +257,9 @@ case "$InitSwitch" in
 				unset IFS
 			fi
 		fi
+
+		#### Flush mail queue
+		if gfnCheckCommand 0 postfix && gfnGetPid postfix; then postfix flush; fi
 	;;
 
 	refresh)
@@ -335,7 +338,8 @@ case "$InitSwitch" in
 		fi
 		#### IPtables - SAVE Iptables Rules
 
-		if gfnCheckCommand 0 postfix && gfnGetPid $Service; then postfix flush; fi
+		#### Flush mail queue
+		if gfnCheckCommand 0 postfix && gfnGetPid postfix; then postfix flush; fi
 	;;
 
 	*)
