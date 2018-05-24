@@ -55,7 +55,7 @@ function Form() {
 					</tr>
 					<tr>
 						<td>' . MainUser_UserAdd_Quota . '</td>
-						<td><input name="quota" type="number" style="width:100px;" /><p class="Comments">' . MainUser_UserAdd_Comment_FreeSpace . ($system_datas["quota_default"] - $system_datas["total_space_used"]) . '</p></td>
+						<td><input name="quota" type="text" style="width:100px;" /><p class="Comments">' . MainUser_UserAdd_Comment_FreeSpace . ($system_datas["quota_default"] - $system_datas["total_space_used"]) . '</p></td>
 					</tr>
 				</table>
 				<div align="center"><p class="Comments">' . MainUser_UserAdd_Comment . '</p></div>
@@ -197,8 +197,7 @@ if ( !empty($sUsersList) ) {
 					<select name="IsActive" style="width:120px; height: 28px;" disabled><?php echo $options; ?></select>
 				</td>
 				<td>
-					<input style="width:100px;" type="number" name="quota[]" value="<?php echo $User["quota"]; ?>" />
-					<?php echo $User["quota"]; ?>
+					<input style="width:100px;" type="text" name="quota[]" value="<?php echo $User["quota"]; ?>" />
 				</td>
 				<td>
 					<?php switch ($User["account_type"]) {
