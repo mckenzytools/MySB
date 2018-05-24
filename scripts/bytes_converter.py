@@ -32,7 +32,6 @@ License: MIT
 Working with Python 2.x and 3.x.
 """
 
-import doctest
 import argparse
 import os
 
@@ -100,9 +99,19 @@ def main():
     elif args.command == 'help_htb':
             help(human2bytes)
     else:
+        if args.mode == 'bth':
+            if args.value != '':
+                print(bytes2human(args.value))
+            else:
+                print('Error with value {}'.format(args.value))
+        elif args.mode == 'htb':
+            if args.value != '':
+                print(human2bytes('{} Gi'.format(args.value)))
+            else:
+                print('Error with value {}'.format(args.value))
+        else:
             os.system("python3 {}/{} -h".
                 format(os.path.dirname(os.path.realpath(__file__)), __file__))
-
 
 # ############################################################
 def bytes2human(n, format='%(value).1f %(symbol)s', symbols='customary'):
@@ -217,7 +226,6 @@ def human2bytes(s):
 # #####################################################################
 
 if __name__ == "__main__":
-    doctest.testmod()
     main()
 
 # #####################################################################
