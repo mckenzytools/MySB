@@ -4,8 +4,8 @@ cmdMySQL 'MySB_db' "ALTER TABLE repositories CHANGE name name VARCHAR(64) NOT NU
 cmdMySQL 'MySB_db' "ALTER TABLE repositories CHANGE version version VARCHAR(32) NOT NULL;" -v
 cmdMySQL 'MySB_db' "ALTER TABLE repositories CHANGE file file VARCHAR(64) NOT NULL;" -v
 # dnscrypt_config
-cmdMySQL 'MySB_db' "ALTER TABLE dnscrypt_config DROP COLUMN sig_key;" -v
-cmdMySQL 'MySB_db' "ALTER TABLE dnscrypt_config DROP COLUMN csv_url;" -v
+cmdMySQL 'MySB_db' "ALTER TABLE dnscrypt_config DROP COLUMN sig_key;" -v 2> /dev/null
+cmdMySQL 'MySB_db' "ALTER TABLE dnscrypt_config DROP COLUMN csv_url;" -v 2> /dev/null
 # system
 cmdMySQL 'MySB_db' "ALTER TABLE system ADD total_space_used BIGINT(32) NOT NULL DEFAULT '0' AFTER quota_default;" -v
 # users
