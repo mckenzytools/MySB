@@ -93,6 +93,9 @@ if (isset($_POST['submit'])) {
 			$CronID_POST = $_POST['cron_id'];
 			$CronMinutes_POST = $_POST['cron_minutes'];
 			$CronHours_POST = $_POST['cron_hours'];
+			if ( $CronHours_POST == '00' ) {
+				$CronHours_POST = '0';
+			}
 			$CronDays_POST = $_POST['cron_days'];
 			$CronMonths_POST = $_POST['cron_months'];
 			$CronNumday_POST = $_POST['cron_numday'];
