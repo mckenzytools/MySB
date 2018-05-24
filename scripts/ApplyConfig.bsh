@@ -35,25 +35,27 @@ source $(dirname $0)/../inc/includes_before
 UserApplying="$1"
 LocSwitch="$2"
 
-DoApplyConfig() {
-	local sCommandsPriorities nMinPriority nMaxPriority nLastPriority sRequestValues
+fnDoApplyConfig() {
+    local sAllCommandsUser sCommandUser sCommandsPriorities sRequestValues sAllCommands sCommandLine sCommand sCommandArg
+    local sUserToCreate sUserSftp sUserSudo sUserMail sUserAccountType sUserToDelete sUserName sUserPass sUserScriptName sUserScriptMode
+	local nMinPriority nMaxPriority nLastPriority nPriority nQuota
 
 	# 1 - Purger la base des entrées en double (command + user), uniquement l'entrée avec la priorité la plus haute sera conservée
 	User=$1
 
 	echo `/bin/date '+%H:%M:%S'` "- Creating order of execution for $UserApplying"
-	AllCommandsUser="`cmdMySQL 'MySB_db' "SELECT commands FROM commands WHERE user='$User';"`"
-	for CommandUser in $AllCommandsUser; do
-		case "$CommandUser" in
+	sAllCommandsUser="`cmdMySQL 'MySB_db' "SELECT commands FROM commands WHERE user='$User';"`"
+	for sCommandUser in $sAllCommandsUser; do
+		case "$sCommandUser" in
 			BlocklistsRTorrent.bsh|MySB_SecurityRules*|GetTrackersCert.bsh|MySB_ChangeUserPassword|Postfix|Options_MySB|Options_System|OpenVPN|Restart_rTorrent|ManageAddresses) # On peut supprimer les doublons
-				sCommandsPriorities="`cmdMySQL 'MySB_db' "SELECT min(priority), max(priority) FROM commands WHERE user='$User' AND commands='$CommandUser';" | sed 's/\t/|/g;'`"
+				sCommandsPriorities="`cmdMySQL 'MySB_db' "SELECT min(priority), max(priority) FROM commands WHERE user='$User' AND commands='$sCommandUser';" | sed 's/\t/|/g;'`"
 				nMinPriority="`echo $sCommandsPriorities | awk '{split($0,a,"|"); print a[1]}'`"
 				nMaxPriority="`echo $sCommandsPriorities | awk '{split($0,a,"|"); print a[2]}'`"
 				if [ $nMinPriority -ne $nMaxPriority ] && [ ! -z $nMinPriority ] && [ ! -z $nMaxPriority ]; then
 					while [ $nMinPriority -lt $nMaxPriority ]; do
 						# On supprime les premières commandes
-						echo -n "	--> " && echo "DELETE FROM commands WHERE user='$User' AND commands='$CommandUser' AND priority='$nMinPriority';"
-						cmdMySQL 'MySB_db' "DELETE FROM commands WHERE user='$User' AND commands='$CommandUser' AND priority='$nMinPriority';"
+						echo -n "	--> " && echo "DELETE FROM commands WHERE user='$User' AND commands='$sCommandUser' AND priority='$nMinPriority';"
+						cmdMySQL 'MySB_db' "DELETE FROM commands WHERE user='$User' AND commands='$sCommandUser' AND priority='$nMinPriority';"
 						(( nMinPriority++ ))
 					done
 				fi
@@ -82,92 +84,93 @@ DoApplyConfig() {
 	echo -n "	--> " && echo "UPDATE commands SET priority='$nLastPriority' WHERE commands='MySB_SecurityRules' AND user='$User';"
 	cmdMySQL 'MySB_db' "UPDATE commands SET priority='$nLastPriority' WHERE commands='MySB_SecurityRules' AND user='$User';"
 	# 3 - On peut maintenant exécuté les commandes une à une dans l'ordre ascendant des priorités.
-	AllCommands="`cmdMySQL 'MySB_db' "SELECT commands,priority FROM commands WHERE user='$User' ORDER BY priority ASC;" | sed 's/\t/|/g;'`"
-	for CommandLine in $AllCommands; do
-		Command="`echo $CommandLine | awk '{split($0,a,"|"); print a[1]}'`"
-		Priority="`echo $CommandLine | awk '{split($0,a,"|"); print a[2]}'`"
+	sAllCommands="`cmdMySQL 'MySB_db' "SELECT commands,priority FROM commands WHERE user='$User' ORDER BY priority ASC;" | sed 's/\t/|/g;'`"
+	for sCommandLine in $sAllCommands; do
+		sCommand="`echo $sCommandLine | awk '{split($0,a,"|"); print a[1]}'`"
+		nPriority="`echo $sCommandLine | awk '{split($0,a,"|"); print a[2]}'`"
 
 		# Creating arguments listing
-		case "$Command" in
+		case "$sCommand" in
 			MySB_CreateUser|MySB_DeleteUser|MySB_ChangeUserPassword|OpenVPN|LogWatch|UserScript_StartSynchro|Options_System)
-				echo `/bin/date '+%H:%M:%S'` "- Getting arguments for $Command"
-				CommandArg="`cmdMySQL 'MySB_db' "SELECT args FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"`"
+				echo `/bin/date '+%H:%M:%S'` "- Getting arguments for $sCommand"
+				sCommandArg="`cmdMySQL 'MySB_db' "SELECT args FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"`"
 			;;
 		esac
 
 		# Execute commands
-		echo `/bin/date '+%H:%M:%S'` "- Executing $Command for $UserApplying"
-		case "$Command" in
-			"MySB_CreateUser") # ($1 = user, $2 = sftp, $3 = sudo, $4 = email, $5 = account_type)
-				IFS='|' read -a array <<< "$CommandArg"
-				UserToCreate="${array[0]}"
-				UserSftp="${array[1]}"
-				UserSudo="${array[2]}"
-				UserMail="${array[3]}"
-				UserAccountType="${array[4]}"
+		echo `/bin/date '+%H:%M:%S'` "- Executing $sCommand for $UserApplying"
+		case "$sCommand" in
+			"MySB_CreateUser") # ($1 = user, $2 = sftp, $3 = sudo, $4 = email, $5 = account_type, $6 = quota Gb)
+				IFS='|' read -a array <<< "$sCommandArg"
+				sUserToCreate="${array[0]}"
+				sUserSftp="${array[1]}"
+				sUserSudo="${array[2]}"
+				sUserMail="${array[3]}"
+				sUserAccountType="${array[4]}"
+                nQuota="${array[5]}"
 
 				gfnWaitingSTD MySB_CreateUser
-				screen -dmS MySB_CreateUser /bin/bash $MySB_InstallDir/bin/MySB_CreateUser "$UserToCreate" "$UserSftp" "$UserSudo" "$UserMail" "$UserAccountType" 'APPLYCONFIG';
+				screen -dmS MySB_CreateUser /bin/bash $MySB_InstallDir/bin/MySB_CreateUser "$sUserToCreate" "$sUserSftp" "$sUserSudo" "$sUserMail" "$sUserAccountType" "$nQuota" 'APPLYCONFIG';
 				gfnWaitingSTD MySB_CreateUser
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"MySB_DeleteUser") # 1 args
-				UserToDelete="$CommandArg"
+				sUserToDelete="$sCommandArg"
 
 				gfnWaitingSTD MySB_DeleteUser
-				screen -dmS MySB_DeleteUser /bin/bash $MySB_InstallDir/bin/MySB_DeleteUser "$UserToDelete" 'APPLYCONFIG';
+				screen -dmS MySB_DeleteUser /bin/bash $MySB_InstallDir/bin/MySB_DeleteUser "$sUserToDelete" 'APPLYCONFIG';
 				gfnWaitingSTD MySB_DeleteUser
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"MySB_ChangeUserPassword") # ($1 = username, $2 = userpass)
-				IFS='|' read -a array <<< "$CommandArg"
-				UserName="${array[0]}"
-				UserPass="${array[1]}"
+				IFS='|' read -a array <<< "$sCommandArg"
+				sUserName="${array[0]}"
+				sUserPass="${array[1]}"
 
 				gfnWaitingSTD MySB_ChangeUserPassword
-				screen -dmS MySB_ChangeUserPassword /bin/bash $MySB_InstallDir/bin/MySB_ChangeUserPassword "$UserName" "$UserPass" 'APPLYCONFIG';
+				screen -dmS MySB_ChangeUserPassword /bin/bash $MySB_InstallDir/bin/MySB_ChangeUserPassword "$sUserName" "$sUserPass" 'APPLYCONFIG';
 				gfnWaitingSTD MySB_ChangeUserPassword
 				gfnWaitingSTD MySB_SecurityRules
 				screen -dmS MySB_SecurityRules /bin/bash $MySB_InstallDir/bin/MySB_SecurityRules 'refresh' '--users' 'APPLYCONFIG';
 				gfnWaitingSTD MySB_SecurityRules
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"BlocklistsRTorrent.bsh")
 				gfnWaitingSTD BlocklistsRTorrent
 				screen -dmS BlocklistsRTorrent /bin/bash $MySB_InstallDir/scripts/BlocklistsRTorrent.bsh 'APPLYCONFIG';
 				gfnWaitingSTD BlocklistsRTorrent
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"Blocklists_PeerGuardian")
 				gfnWaitingSTD MySB_SecurityRules
 				screen -dmS MySB_SecurityRules /bin/bash $MySB_InstallDir/bin/MySB_SecurityRules 'refresh' '--blocklists' 'APPLYCONFIG';
 				gfnWaitingSTD MySB_SecurityRules
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"ManageAddresses")
 				gfnWaitingSTD MySB_SecurityRules
 				screen -dmS MySB_SecurityRules /bin/bash $MySB_InstallDir/bin/MySB_SecurityRules 'refresh' '--users' 'APPLYCONFIG';
 				gfnWaitingSTD MySB_SecurityRules
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"MySB_SecurityRules")
 				gfnWaitingSTD MySB_SecurityRules
 				screen -dmS MySB_SecurityRules /bin/bash $MySB_InstallDir/bin/MySB_SecurityRules 'create' 'APPLYCONFIG';
 				gfnWaitingSTD MySB_SecurityRules
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"GetTrackersCert.bsh")
@@ -178,16 +181,16 @@ DoApplyConfig() {
 				gfnWaitingSTD MySB_SecurityRules
 				screen -dmS MySB_SecurityRules /bin/bash $MySB_InstallDir/bin/MySB_SecurityRules 'refresh' '--trackers' 'APPLYCONFIG';
 				gfnWaitingSTD MySB_SecurityRules
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"Postfix")
 				gfnWaitingSTD Postfix
 				screen -dmS Postfix /bin/bash $MySB_InstallDir/install/Postfix 'APPLYCONFIG';
 				gfnWaitingSTD Postfix
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"Options_MySB")
@@ -195,20 +198,20 @@ DoApplyConfig() {
 				source $MySB_InstallDir/inc/funcs_by_script/funcs_MySB_CreateUser
 				gfnUserCrontab "$User"
 				gfnWaitingSTD Options_MySB-$User
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"Restart_rTorrent")
 				gfnWaitingSTD rTorrent-$User
 				screen -dmS rTorrent-$User systemctl restart rtorrent-$User &> /dev/null;
 				gfnWaitingSTD rTorrent-$User
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"Options_System") # ($1 = OpenVPN:[0|1], $2 = LogWatch:[-1|0|1], $3 = DNScrypt:[-1|0|1], $4 = MySB_SecurityRules])
-				IFS='|' read -a array <<< "$CommandArg"
+				IFS='|' read -a array <<< "$sCommandArg"
 				OpenVpnSwitch="${array[0]}"
 				LogwatchSwitch="${array[1]}"
 				DNScryptSwitch="${array[2]}"
@@ -248,35 +251,35 @@ DoApplyConfig() {
 					gfnWaitingSTD MySB_SecurityRules
 				fi
 
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"OpenVPN") # ($1 = username, $2 = userpass)
-				IFS='|' read -a array <<< "$CommandArg"
-				UserName="${array[0]}"
-				UserPass="${array[1]}"
+				IFS='|' read -a array <<< "$sCommandArg"
+				sUserName="${array[0]}"
+				sUserPass="${array[1]}"
 
 				gfnWaitingSTD OpenVPN_Zip
-				screen -dmS OpenVPN_Zip /bin/bash $MySB_InstallDir/install/OpenVPN zip "$UserName" "$UserPass" 'APPLYCONFIG';
+				screen -dmS OpenVPN_Zip /bin/bash $MySB_InstallDir/install/OpenVPN zip "$sUserName" "$sUserPass" 'APPLYCONFIG';
 				gfnWaitingSTD OpenVPN_Zip
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 
 			"UserScript_StartSynchro") # ($1 = script, $2 = mode)
-				IFS='|' read -a array <<< "$CommandArg"
-				UserScriptName="${array[0]}"
-				UserScriptMode="${array[1]}"
+				IFS='|' read -a array <<< "$sCommandArg"
+				sUserScriptName="${array[0]}"
+				sUserScriptMode="${array[1]}"
 
-				if [ -f /home/$User/scripts/$UserScriptName ]; then
-					case "$UserScriptMode" in
-						'DIRECT')	screen -dmS UserScript_StartSynchro su -s /bin/sh $User -c "/bin/bash /home/$User/scripts/$UserScriptName 'DIRECT' > /dev/null 2>&1";;
-						'CRON')		screen -dmS UserScript_StartSynchro su -s /bin/sh $User -c "/bin/bash /home/$User/scripts/$UserScriptName 'CRON' > /dev/null 2>&1";;
+				if [ -f /home/$User/scripts/$sUserScriptName ]; then
+					case "$sUserScriptMode" in
+						'DIRECT')	screen -dmS UserScript_StartSynchro su -s /bin/sh $User -c "/bin/bash /home/$User/scripts/$sUserScriptName 'DIRECT' > /dev/null 2>&1";;
+						'CRON')		screen -dmS UserScript_StartSynchro su -s /bin/sh $User -c "/bin/bash /home/$User/scripts/$sUserScriptName 'CRON' > /dev/null 2>&1";;
 					esac
 				fi
-				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
-				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$Command' AND user='$User' AND priority='$Priority';"
+				echo -n "	--> " && echo "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
+				cmdMySQL 'MySB_db' "DELETE FROM commands WHERE commands='$sCommand' AND user='$User' AND priority='$nPriority';"
 			;;
 		esac
 	done
@@ -295,7 +298,7 @@ case "$LocSwitch" in
 
 		if [ ! -z "$UserApplying" ]; then
 			echo `/bin/date '+%H:%M:%S'` "- Executing commands"
-			DoApplyConfig $UserApplying
+			fnDoApplyConfig $UserApplying
 		fi
 	;;
 esac

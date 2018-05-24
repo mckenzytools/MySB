@@ -26,6 +26,7 @@ define('MainUser_UserAdd_Username', 'Nom d\'utilisateur :');
 define('MainUser_UserAdd_UserEmail', 'E-mail de l\'utilisateur :');
 define('MainUser_UserAdd_ConfirmEmail', 'Confirmation :');
 define('MainUser_UserAdd_AccountType', 'Type de compte :');
+define('MainUser_UserAdd_Quota', 'Quota (Gb) :');
 define('MainUser_UserAdd_AddUser', 'Ajouter cet utilisateur');
 define('MainUser_UserAdd_VerifError', 'Erreur entre l\'email saisie et la v&eacute;rification.');
 define('MainUser_UserAdd_BadAddress', 'L\'adresse e-mail indiqu&eacute;e n\'est pas valide !');
@@ -34,6 +35,7 @@ define('MainUser_UserAdd_UserDontExist', 'Echec !<br /><br />L\'utilisateur n\'e
 define('MainUser_UserAdd_Table_Username', 'Nom d\'utilisateur');
 define('MainUser_UserAdd_Table_Email', 'E-mail');
 define('MainUser_UserAdd_Table_IsSftp', 'SFTP ?');
+define('MainUser_UserAdd_Table_SetQuota', 'Forcer le quota (Gb)');
 define('MainUser_UserAdd_Table_Quota', 'Utilisé / Quota');
 define('MainUser_UserAdd_Table_Password', 'Mot de passe');
 define('MainUser_UserAdd_Table_AccountType', 'Type de compte');
@@ -41,6 +43,13 @@ define('MainUser_UserAdd_Table_Treasury', 'Tr&eacute;sorerie');
 define('MainUser_UserAdd_Table_CreatedAt', 'Date de<br />cr&eacute;ation');
 define('MainUser_UserAdd_PasswordOK', 'Modifi&eacute;');
 define('MainUser_UserAdd_PasswordKO', 'Temporaire');
-define('MainUser_UserAdd_Comment', 'Un compte "<b>normal</b>" disposera de tous les services.<br />Un compte "<b>plex</b>" ne disposera d\'aucun service. Ce type de compte est conseill&eacute; pour les utilisateurs acc&eacute;dant uniquement à Plex.<br />Les services tels que ruTorrent, Cakebox, Seedbox Manager, OpenVPN et NextCloud ne seront pas disponibles.<br />Un compte <b>plex</b> permet de ne pas réduire le quota disque des autres utilisateurs.');
+define('MainUser_UserAdd_Comment_FreeSpace', 'Espace disponible: ');
+define('MainUser_UserAdd_Comment', 'Un compte "<b>normal</b>" disposera de tous les services.<br />
+Un compte "<b>plex</b>" ne disposera d\'aucun service. Ce type de compte est conseill&eacute; pour les utilisateurs acc&eacute;dant uniquement à Plex.<br />
+Les services tels que ruTorrent, Cakebox, Seedbox Manager, OpenVPN et NextCloud ne seront pas disponibles.<br />
+Un compte <b>plex</b> permet de ne pas réduire le quota disque des autres utilisateurs.<br />
+<br />
+Pour le <b>Quota</>, laissez le champs vide pour une gestion automatique.<br />
+Sinon, saisissez une valeur numérique en Gb.');
 
 //#################### LAST LINE ######################################

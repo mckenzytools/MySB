@@ -11,6 +11,7 @@
 			- Tautulli v2.1.9
 			- PlexMedia v1.13.0.5023
 			- PlexMedia & Tautulli, daily check for new version and install it if needed
+			- MySB_UpgradeSystem, add cron job every week
 			- Portal
 				* Medoo Framework v1.5.6
 			- Quota

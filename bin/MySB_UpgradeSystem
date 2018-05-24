@@ -37,7 +37,6 @@ GeoTrustDir="$MySB_InstallDir/ssl/GeoTrust"
 GeoTrustUrl="https://www.geotrust.com/resources/root_certificates/certificates"
 GoDaddyDir="$MySB_InstallDir/ssl/GoDaddy"
 GoDaddyUrl="https://certs.godaddy.com/repository"
-binCRUL="curl -skLS --retry 3"
 
 #### Create dir
 if [ ! -d $GeoTrustDir ]; then mkdir $GeoTrustDir; fi

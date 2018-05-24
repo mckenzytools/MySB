@@ -53,6 +53,10 @@ function Form() {
 							</select>
 						</td>
 					</tr>
+					<tr>
+						<td>' . MainUser_UserAdd_Quota . '</td>
+						<td><input name="quota" type="number" style="width:100px;" /><p class="Comments">' . MainUser_UserAdd_Comment_FreeSpace . ($system_datas["quota_default"] - $system_datas["total_space_used"]) . '</p></td>
+					</tr>
 				</table>
 				<div align="center"><p class="Comments">' . MainUser_UserAdd_Comment . '</p></div>
 				<input class="submit" style="width:' . strlen(Global_SaveChanges)*10 . 'px; margin-top: 10px;" name="submit" type="submit" value="' .MainUser_UserAdd_AddUser. '"">
@@ -69,6 +73,7 @@ if(isset($_POST)==true && empty($_POST)==false) {
 			$email = $_POST['email'];
 			$confirm_email = $_POST['confirm_email'];
 			$account_type = $_POST['account_type'];
+            $quota = $_POST['quota'];
 			$sftp = 1;
 			$sudo = 0;
 			$args = false;
@@ -79,7 +84,7 @@ if(isset($_POST)==true && empty($_POST)==false) {
 					if ( ValidateEmail($email) != false ) {
 						if ( $email == $confirm_email ) {
 							$type = 'success';
-							$args = "$username|$sftp|$sudo|$email|$account_type";
+							$args = "$username|$sftp|$sudo|$email|$account_type|$quota";
 						} else {
 							$type = 'error';
 							$message = MainUser_UserAdd_VerifError;
@@ -120,10 +125,10 @@ if(isset($_POST)==true && empty($_POST)==false) {
 	}
 }
 
-Form();
-
 $sUsersList = $MySB_DB->select("users", ["id_users", "users_ident", "users_passwd", "users_email", "quota", "space_used", "account_type", "created_at"], ["AND" => ["is_active" => "1"]]);
-$system_datas = $MySB_DB->get("system", ["rt_model", "rt_cost_tva"], ["id_system" => 1]);
+$system_datas = $MySB_DB->get("system", ["quota_default", "total_space_used", "rt_model", "rt_cost_tva"], ["id_system" => 1]);
+
+Form();
 
 if ( !empty($sUsersList) ) {
 ?>
@@ -134,6 +139,7 @@ if ( !empty($sUsersList) ) {
 				<th style="text-align:center;"><?php echo MainUser_UserAdd_Table_Email; ?></th>
 				<th style="text-align:center;"><?php echo MainUser_UserAdd_Table_Password; ?></th>
 				<th style="text-align:center;"><?php echo MainUser_UserAdd_Table_AccountType; ?></th>
+                <th style="text-align:center;"><?php echo MainUser_UserAdd_Table_SetQuota; ?></th>
 				<th style="text-align:center;"><?php echo MainUser_UserAdd_Table_Quota; ?></th>
 				<th style="text-align:center;"><?php echo MainUser_UserAdd_Table_CreatedAt; ?></th>
 <?php
@@ -191,9 +197,13 @@ if ( !empty($sUsersList) ) {
 					<select name="IsActive" style="width:120px; height: 28px;" disabled><?php echo $options; ?></select>
 				</td>
 				<td>
+					<input style="width:100px;" type="number" name="quota[]" value="<?php echo $User["quota"]; ?>" />
+					<?php echo $User["quota"]; ?>
+				</td>
+				<td>
 					<?php switch ($User["account_type"]) {
 						case 'plex':
-							echo '';
+							echo GetSizeName($User["space_used"].'KB');
 							break;
 						default:
 							echo GetSizeName($User["space_used"].'KB') . ' / ' . GetSizeName($User["quota"].'KB');

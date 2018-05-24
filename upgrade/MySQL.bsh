@@ -6,7 +6,10 @@ cmdMySQL 'MySB_db' "ALTER TABLE repositories CHANGE file file VARCHAR(64) NOT NU
 # dnscrypt_config
 cmdMySQL 'MySB_db' "ALTER TABLE dnscrypt_config DROP COLUMN sig_key;" -v
 cmdMySQL 'MySB_db' "ALTER TABLE dnscrypt_config DROP COLUMN csv_url;" -v
-ALTER TABLE tbl_Country DROP COLUMN IsDeleted;
+# system
+cmdMySQL 'MySB_db' "ALTER TABLE system ADD total_space_used BIGINT(32) NOT NULL DEFAULT '0' AFTER quota_default;" -v
+# users
+cmdMySQL 'MySB_db' "ALTER TABLE users ADD quota_type VARCHAR(6) NOT NULL DEFAULT 'auto' AFTER account_type;" -v
 #### 1 - ALTER some tables - EoF
 
 #### 2 - Import Schema for new tables, triggers & constraints - BoF

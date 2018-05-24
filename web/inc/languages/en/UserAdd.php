@@ -26,6 +26,7 @@ define('MainUser_UserAdd_Username', 'Username :');
 define('MainUser_UserAdd_UserEmail', 'User e-mail :');
 define('MainUser_UserAdd_ConfirmEmail', 'Confirm e-mail :');
 define('MainUser_UserAdd_AccountType', 'Account type :');
+define('MainUser_UserAdd_Quota', 'Quota (Gb) :');
 define('MainUser_UserAdd_AddUser', 'Add this user');
 define('MainUser_UserAdd_VerifError', 'Error between the typed email and verification.');
 define('MainUser_UserAdd_BadAddress', 'The given e-mail address is not valid !');
@@ -34,6 +35,7 @@ define('MainUser_UserAdd_UserDontExist', 'Failed !<br /><br />User does not exis
 define('MainUser_UserAdd_Table_Username', 'Username');
 define('MainUser_UserAdd_Table_Email', 'E-mail');
 define('MainUser_UserAdd_Table_IsSftp', 'SFTP ?');
+define('MainUser_UserAdd_Table_SetQuota', 'Force quota (Gb)');
 define('MainUser_UserAdd_Table_Quota', 'Used / Quota');
 define('MainUser_UserAdd_Table_Password', 'Password');
 define('MainUser_UserAdd_Table_AccountType', 'Account type');
@@ -41,6 +43,13 @@ define('MainUser_UserAdd_Table_Treasury', 'Treasury');
 define('MainUser_UserAdd_Table_CreatedAt', 'Creation date');
 define('MainUser_UserAdd_PasswordOK', 'Changed');
 define('MainUser_UserAdd_PasswordKO', 'Temporary');
-define('MainUser_UserAdd_Comment', 'A "<b>normal</b>" account will have all services.<br />A "<b>plex</b>" account will have no service. This type of account is recommended for users accessing Plex only.<br />Services such as ruTorrent, Cakebox, Seedbox Manager, OpenVPN and NextCloud will not be available.<br />A plex account does not reduce the disk quota of other users.');
+define('MainUser_UserAdd_Comment_FreeSpace', 'Available space: ');
+define('MainUser_UserAdd_Comment', 'A "<b>normal</b>" account will have all services.<br />
+A "<b>plex</b>" account will have no service. This type of account is recommended for users accessing Plex only.<br />
+Services such as ruTorrent, Cakebox, Seedbox Manager, OpenVPN and NextCloud will not be available.<br />
+A plex account does not reduce the disk quota of other users.<br />
+<br />
+For the <b>Quota</>, leave the field blank for automatic management.<br />
+Otherwise, enter a numeric value in Gb.');
 
 //#################### LAST LINE ######################################

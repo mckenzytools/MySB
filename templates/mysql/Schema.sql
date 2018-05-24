@@ -246,6 +246,7 @@ CREATE TABLE IF NOT EXISTS `system` (
   `letsencrypt_date` date NOT NULL DEFAULT '0000-00-00',
   `letsencrypt_openport` tinyint(1) NOT NULL DEFAULT '0',
   `quota_default` bigint(32) NOT NULL DEFAULT '0',
+  `total_space_used` bigint(32) NOT NULL DEFAULT '0',
   `rt_model` varchar(64) DEFAULT '',
   `rt_tva` decimal(6,2) NOT NULL DEFAULT '0.00',
   `rt_global_cost` decimal(6,2) NOT NULL DEFAULT '0.00',
@@ -384,6 +385,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `treasury` decimal(6,2) NOT NULL DEFAULT '0.00',
   `created_at` date NOT NULL DEFAULT '0000-00-00',
   `account_type` varchar(6) NOT NULL DEFAULT 'normal',
+  `quota_type` varchar(6) NOT NULL DEFAULT 'auto',
   PRIMARY KEY (`id_users`),
   UNIQUE KEY `users_ident` (`users_ident`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;

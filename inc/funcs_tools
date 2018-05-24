@@ -34,6 +34,28 @@ gfnQuotaSpaceAvailable() {
     echo $nFreeSpace
 }
 
+#### Quota, space used for each users
+gfnQuotaSpaceUsed() {
+    local nUsersSpaceUsed nHomeSpace nNextCloudSpace nTotalSpaceUsed
+    nTotalSpaceUsed=0
+
+    gfnListCountUsers 'all'
+	for sUser in $gsUsersList; do
+		nUsersSpaceUsed=0
+		if [ -d /home/$sUser/ ]; then
+			nHomeSpace="`du -s /home/$sUser/ | awk '{ print $1 }'`" # (Kb)
+			nUsersSpaceUsed=$(($nUsersSpaceUsed+$nHomeSpace))
+		fi
+		if [ -d /home/nextcloud/$sUser/ ]; then
+			nNextCloudSpace="`du -s /home/nextcloud/$sUser/ | awk '{ print $1 }'`" # (Kb)
+			nUsersSpaceUsed=$(($nUsersSpaceUsed+$nNextCloudSpace))
+		fi
+        nTotalSpaceUsed=$(($nTotalSpaceUsed-$nUsersSpaceUsed))
+        cmdMySQL 'MySB_db' "UPDATE users SET space_used='$nUsersSpaceUsed' WHERE users_ident='$sUser';" $sVerbose
+	done
+    cmdMySQL 'MySB_db' "UPDATE system SET total_space_used='$nTotalSpaceUsed' WHERE id_system='1';" $sVerbose
+}
+
 #### Statistics
 gfnStatistics() {
 	# No credentials are retained !

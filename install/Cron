@@ -39,6 +39,9 @@ echo "*/5 * * * * /bin/bash $MySB_InstallDir/scripts/DynamicAddressResolver.bsh 
 # Update Actual Git Repo of MySB
 sed -i '/MySB_GitHubRepoUpdate/d' /tmp/crontab.tmp
 echo "0 12 * * * /bin/bash $MySB_InstallDir/bin/MySB_GitHubRepoUpdate CRON > /dev/null 2>&1" | tee -a /tmp/crontab.tmp
+# Upgrade system
+sed -i '/MySB_UpgradeSystem/d' /tmp/crontab.tmp
+echo "0 2 * * */7 /bin/bash $MySB_InstallDir/bin/MySB_UpgradeSystem CRON > /dev/null 2>&1" | tee -a /tmp/crontab.tmp
 # Check update for MySB
 sed -i '/MySB_UpgradeMe/d' /tmp/crontab.tmp
 echo "0 4 */3 * * /bin/bash $MySB_InstallDir/bin/MySB_UpgradeMe CRON > /dev/null 2>&1" | tee -a /tmp/crontab.tmp
