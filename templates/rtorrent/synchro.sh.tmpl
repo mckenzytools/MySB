@@ -150,8 +150,8 @@ fnListing() {
 		sDstDir="$RemoteDir/$sGetCustom1/$sSubDirectory"
 	fi
 	sDstDir="`echo $sDstDir | sed -e 's/^ //g;' | sed 's/\s+$//'`"
-	sDstDir="`echo $sDstDir | sed 's/\[//g;' | sed 's/\]//g;' | sed 's/(//g' | sed 's/)//g' | sed 's/\ /./g;'`"
-	sRemoteDestination="`echo $sDstDir/$sGetName | sed 's/\[//g;' | sed 's/\]//g;' | sed 's/(//g' | sed 's/)//g' | sed 's/\ /./g;'`"
+	sDstDir="`echo $sDstDir | sed 's/\[//g;' | sed 's/\]//g;' | sed 's/(//g' | sed 's/)//g' | sed 's/\ /./g;' | sed 's/,/./g;' | sed "s/'/./g;"`"
+	sRemoteDestination="`echo $sDstDir/$sGetName | sed 's/\[//g;' | sed 's/\]//g;' | sed 's/(//g' | sed 's/)//g' | sed 's/\ /./g;' | sed 's/,/./g;' | sed "s/'/./g;"`"
 
 	# Check local file or directory size
 	sLocalSize="`du -hs $sGetBasePath | awk '{ print $1 }' | sed -e 's/,/./g;'`"
