@@ -2,7 +2,7 @@
 
 # English
 
-MySB (My SeedBox) is a multi-user seedbox for dedicated server under Debian 8 (Jessie) and could be renamed MySSB, My Secured SeedBox.
+MySB (My SeedBox) is a multi-user seedbox for dedicated server under Debian 9 (Stretch) and could be renamed MySSB, My Secured SeedBox.
 All of MySB's interest lies in security through block list management with PeerGuardian (or rTorrent) for incoming requests, as well as encrypting DNS queries with DNScrypt-proxy for outbound requests.
 SSL connections are prioritized by rTorrent. Torrent management is also simplified with NextCloud and the MySB portal for remote data synchronization via Rsync or FTPs.
 
@@ -16,7 +16,7 @@ A simple question, do you know who to connect to your server?
 
 # Français
 
-MySB (My SeedBox) est une seedbox multi-utilisateurs pour un serveur dédié sous Debian 8 (Jessie) et pourrait être renommée MySSB, My Secured SeedBox.
+MySB (My SeedBox) est une seedbox multi-utilisateurs pour un serveur dédié sous Debian 9 (Stretch) et pourrait être renommée MySSB, My Secured SeedBox.
 Tout l'intérêt de MySB réside dans la sécurité via la gestion de listes de blocage d'IP avec PeerGuardian (ou rTorrent) pour les requêtes entrantes, ainsi que le cryptage des requêtes DNS grâce à DNScrypt-proxy pour les requêtes sortantes.
 Les connections SSL sont priorisées par rTorrent. La gestion des torrents est également simplifiée grâce à NextCloud et au portail MySB pour la synchronisation distante des données par Rsync ou FTPs.
 
