@@ -67,7 +67,11 @@ install -v -o root -g root -m 0600 $MySB_InstallDir/templates/mysql/etc.mysql.cn
 
 #### START services
 systemctl daemon-reload
-gfnManageServices 'start' 'mysql'
+if [ "$gsSwitch" == "UPGRADE" ]; then
+    /etc/init.d/mysql start
+else
+    gfnManageServices 'start' 'mysql'
+fi
 
 #### Load configs values
 [ -f /etc/MySB/config_db ] && source /etc/MySB/config_db

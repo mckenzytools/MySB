@@ -71,6 +71,8 @@ case "$1" in
 		[ -d $MySB_InstallDir/files/apt_mirrors/mirrors/moblock-deb.sourceforge.net ] && rm -vrf $MySB_InstallDir/files/apt_mirrors/mirrors/moblock-deb.sourceforge.net
 		[ -d $MySB_InstallDir/files/apt_mirrors/mirrors/shell.ninthgate.se ] && rm -vrf $MySB_InstallDir/files/apt_mirrors/mirrors/shell.ninthgate.se
 		[ -d /etc/php5 ] && rm -vrf /etc/php5
+        [ -d /usr/share/doc/php5-common ] && rm -vrf /usr/share/doc/php5-common
+        [ -d /usr/lib/php5/ ] && rm -vrf /usr/lib/php5/
 		apt-get clean -y
 		apt-get autoclean -y
 		apt-get autoremove -y
@@ -102,6 +104,14 @@ case "$1" in
 		#### Quota
 		nFreeSpace=$(gfnQuotaSpaceAvailable)
 		cmdMySQL 'MySB_db' "UPDATE system SET quota_default='$nFreeSpace' WHERE id_system='1';" $sVerbose
+
+		#### Cleaning
+		rm -vf /usr/share/nano/conf.nanorc
+		rm -vf /usr/share/nano/ini.nanorc
+		rm -vf /etc/apt/sources.list~
+
+        #### STOP some services
+        gfnManageServices stop "fail2ban"
 	;;
 	"AFTER")
 		####################################
@@ -150,33 +160,18 @@ case "$1" in
 
 		#### Check actuel quota
 		repquota -a
+
+        #### Cleaning
+        updatedb
+        for file in $(locate *.dpkg-dist *.dpkg-bak *.ucf-dist); do
+            if [ ! -z "$gbDevMode" ] && [ $gbDevMode -eq 1 ]; then
+                mv -vf $file $MySB_InstallDir/logs/TODEL/
+            else
+                rm -vf $file
+            fi
+        done
 		#### To call for every upgrade - EoF
 		####################################
-
-		#### Cleaning
-		rm -vf /etc/vim/vimrc.dpkg-dist
-		rm -vf /etc/vsftpd.conf.dpkg-dist
-		rm -vf /etc/nanorc.dpkg-dist
-		rm -vf /usr/share/nano/conf.nanorc
-		rm -vf /usr/share/nano/ini.nanorc
-		rm -vf /etc/init.d/rpcbind.dpkg-dist
-		rm -vf /etc/init.d/bind9.dpkg-dist
-		rm -vf /etc/logrotate.d/mysql-server.dpkg-dist
-		rm -vf /etc/logrotate.d/samba.dpkg-dist
-		rm -vf /etc/fail2ban/fail2ban.conf.dpkg-dist
-		rm -vf /etc/ntp.conf.dpkg-dist
-		rm -vf /etc/rsyslog.conf.dpkg-dist
-		rm -vf /etc/sysctl.conf.dpkg-dist
-		rm -vf /etc/nginx/nginx.conf.dpkg-dist
-		rm -vf /etc/nginx/sites-available/default.dpkg-dist
-		rm -vf /etc/fail2ban/action.d/mail-whois.conf.dpkg-dist
-		rm -vf /etc/fail2ban/action.d/mail-whois-lines.conf.dpkg-dist
-		rm -vf /etc/fail2ban/action.d/sendmail.conf.dpkg-dist
-		rm -vf /etc/fail2ban/action.d/sendmail-whois.conf.dpkg-dist
-		rm -vf /etc/fail2ban/action.d/mail-whois-lines.conf.dpkg-dist
-		rm -vf /etc/samba/smb.conf.ucf-dist
-		rm -vf /etc/ssh/sshd_config.ucf-dist
-		rm -vf /etc/apt/sources.list~
 	;;
 esac
 

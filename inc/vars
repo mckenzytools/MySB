@@ -199,14 +199,6 @@ if [ ! -z "$MySB_InstallDir" ] && [ "$gbIsReady_MySB_Db" == "YES" ]; then
 	else
 		gsTimeZone="Europe/Paris"
 	fi
-
-	# Ger country with GeoIP
-	if [ "`gfnCheckCommand 1 geoiplookup`" == "YES" ] && [ ! -z "$gsSrvIpAddressExt" ]; then
-		gsCountry="`geoiplookup $gsSrvIpAddressExt | awk '{ print $5 }'`"
-		[ -z "$gsCountry" ] && gsCountry="unknown"
-	else
-		gsCountry="unknown"
-	fi
 	### ----- System info
 
 	### ----- Main user info
@@ -443,6 +435,7 @@ if [ ! -z "$gbDevMode" ] && [ $gbDevMode -eq 1 ] && [ -d $MySB_InstallDir/logs ]
 	[ ! -d $MySB_InstallDir/logs/VARs ] && mkdir $MySB_InstallDir/logs/VARs
 	[ ! -d $MySB_InstallDir/logs/PGLCMD ] && mkdir $MySB_InstallDir/logs/PGLCMD
 	[ ! -d $MySB_InstallDir/logs/IPTABLES ] && mkdir $MySB_InstallDir/logs/IPTABLES
+    [ ! -d $MySB_InstallDir/logs/TODEL ] && mkdir $MySB_InstallDir/logs/TODEL
 	( set -o posix ; set ) |  grep -e '^gs' -e '^gb' -e '^gn' > $MySB_InstallDir/logs/VARs/${gsScriptName}_VARs.log
 fi
 

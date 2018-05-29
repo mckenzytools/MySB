@@ -62,14 +62,21 @@ gfnStatistics() {
 	# The server IP is only used to know the country of the SeedBox.
 	# The IP address is not keeped on destination.
 	# No log is retained via the 'CustomLog /dev/null Combined' parameter.
-	local sMachineId sStatsAllowed sResult
+	local sMachineId sStatsAllowed sResult sCountry
 
 	if [ -f /etc/machine-id ]; then
+        if [ "`gfnCheckCommand 1 geoiplookup`" == "YES" ] && [ ! -z "$gsSrvIpAddressExt" ]; then
+            sCountry="`geoiplookup $gsSrvIpAddressExt | awk '{ print $5 }'`"
+            [ -z "$sCountry" ] && sCountry="unknown"
+        else
+            sCountry="unknown"
+        fi
+
 		sMachineId="`cat /etc/machine-id`"
 		[ -f $MySB_InstallDir/statistics ] && sStatsAllowed="`cat $MySB_InstallDir/statistics`" || sStatsAllowed=""
 		if [ ! -z "$sMachineId" ] && [ "$sStatsAllowed" != "no_stats" ]; then
-			[ -z "$gsCountry" ] && gsCountry="unknown"
-			sResult="`curl --silent --retry 1 -A 'MySB' --data "version=$gsCurrentVersion&country=$gsCountry&machine_id=$sMachineId" http://mysb.is-by.us/statistics/`"
+			[ -z "$sCountry" ] && sCountry="unknown"
+			sResult="`curl --silent --retry 1 -A 'MySB' --data "version=$gsCurrentVersion&country=$sCountry&machine_id=$sMachineId" http://mysb.is-by.us/statistics/`"
 			[ ! -z "`echo $sResult | grep 'Statistics updated at'`" ] && echo "$sResult" > $MySB_InstallDir/statistics
 		fi
 	fi

@@ -132,7 +132,7 @@ Questions_InstallDNScrypt="Do you want to install DNScrypt-proxy (recommended) ?
 Questions_Message_Statistics="${CYELLOW}Would you like to report me your installation ?
 The informations collected are:
 1/	The version number of MySB ($gsCurrentVersion)
-2/	The country where your server is located ($gsCountry)
+2/	The country where your server is located ($sCountry)
 3/	The ID of your server (/etc/machine-id)
 No other information is sent.
 The access logs are not kept, so the IP address of your server is not preserved.
