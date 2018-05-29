@@ -1,7 +1,7 @@
 	Version v99.99
 		(start at: 2018/03/25)
 			- DNScrypt-proxy, review resolvers list
-			- Let's Encrypt, review resolvers list
+			- Let's Encrypt, review renew method
 			- Systemctl, review services management
 			- Migration from Jessie to Stretch
 			- Upgrade PHP5 to PHP7
@@ -16,11 +16,11 @@
 				* Medoo Framework v1.5.6
 			- Quota
 				* Bug fix for calculate available space
-				* Add possibility to choice quota by users
+				* Add possibility to choice quota per users
 				* Add possibility to choice simple management for 'normal' users (total space / quantity of 'normal' users) ('plex' users or not included)
 			- Rental
 				* Add possibility to fix monthly
-				* Add possibility to add aditional price
+				* Add possibility to add aditional price for options
 
 	Version v5.2
 		2018/03/24 (start at: 2018/01/18)
