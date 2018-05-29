@@ -215,7 +215,7 @@ gfnCheckFQDN() {
 		nReturn=1
 	fi
 
-	echo nReturn
+	echo $nReturn
 }
 
 #### Check if mail syntax is good
