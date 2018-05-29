@@ -26,7 +26,7 @@ require_once(WEB_INC . '/languages/' . $_SESSION['Language'] . '/' . basename(__
 
 global $MySB_DB;
 
-function Form() {
+function Form($FreeSpace) {
 	global $MySB_DB;
 
 	echo '<form class="form_settings" method="post" action="">
@@ -55,7 +55,7 @@ function Form() {
 					</tr>
 					<tr>
 						<td>' . MainUser_UserAdd_Quota . '</td>
-						<td><input name="quota" type="text" style="width:100px;" /><p class="Comments">' . MainUser_UserAdd_Comment_FreeSpace . ($system_datas["quota_default"] - $system_datas["total_space_used"]) . '</p></td>
+						<td><input name="quota" type="text" style="width:100px;" /><p class="Comments">' . MainUser_UserAdd_Comment_FreeSpace . $FreeSpace . '</p></td>
 					</tr>
 				</table>
 				<div align="center"><p class="Comments">' . MainUser_UserAdd_Comment . '</p></div>
@@ -128,7 +128,7 @@ if(isset($_POST)==true && empty($_POST)==false) {
 $sUsersList = $MySB_DB->select("users", ["id_users", "users_ident", "users_passwd", "users_email", "quota", "space_used", "account_type", "created_at"], ["AND" => ["is_active" => "1"]]);
 $system_datas = $MySB_DB->get("system", ["quota_default", "total_space_used", "rt_model", "rt_cost_tva"], ["id_system" => 1]);
 
-Form();
+Form(GetSizeName(($system_datas["quota_default"] - $system_datas["total_space_used"]).'KB'));
 
 if ( !empty($sUsersList) ) {
 ?>
