@@ -98,8 +98,8 @@ case "$1" in
 		fi
 		install -v -g root -o root -m 0644 $MySB_InstallDir/templates/nginx/etc.nginx.locations.nextcloud.conf.tmpl /etc/nginx/locations/NextCloud.conf
 		perl -pi -e "s/<MySB_InstallDir>/$gsInstallDirEscaped/g" /etc/nginx/locations/NextCloud.conf
-		# rtorrent
-		rm -fv /usr/local/bin/rtorrent
+        rm -f /var/log/nginx/error.log
+        rm -f /var/log/nginx/*-error.log
 
 		#### Quota
 		nFreeSpace=$(gfnQuotaSpaceAvailable)
@@ -109,9 +109,7 @@ case "$1" in
 		rm -vf /usr/share/nano/conf.nanorc
 		rm -vf /usr/share/nano/ini.nanorc
 		rm -vf /etc/apt/sources.list~
-
-        #### STOP some services
-        gfnManageServices stop "fail2ban"
+        rm -vf /usr/local/bin/rtorrent
 	;;
 	"AFTER")
 		####################################

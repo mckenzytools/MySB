@@ -39,6 +39,7 @@ if [ "$gbToInstall_Fail2Ban" == "YES" ]; then
 	install -v -g root -o root -m 0664 $MySB_InstallDir/templates/fail2ban/etc.fail2ban.fail2ban.conf.tmpl /etc/fail2ban/fail2ban.conf
 
 	# action.d
+    install -v -g root -o root -m 0664 $MySB_InstallDir/templates/fail2ban/etc.fail2ban.action.d.sendmail-common.local.tmpl /etc/fail2ban/action.d/etc.fail2ban.action.d.sendmail-common.local.tmpl
 	install -v -g root -o root -m 0664 $MySB_InstallDir/templates/fail2ban/etc.fail2ban.action.d.mail.conf.tmpl /etc/fail2ban/action.d/mail.conf
 	install -v -g root -o root -m 0664 $MySB_InstallDir/templates/fail2ban/etc.fail2ban.action.d.mail-buffered.conf.tmpl /etc/fail2ban/action.d/mail-buffered.conf
 	install -v -g root -o root -m 0664 $MySB_InstallDir/templates/fail2ban/etc.fail2ban.action.d.mail-whois.conf.tmpl /etc/fail2ban/action.d/mail-whois.conf
