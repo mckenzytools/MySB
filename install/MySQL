@@ -66,11 +66,11 @@ rm -fv /etc/mysql/conf.d/*.cnf
 install -v -o root -g root -m 0600 $MySB_InstallDir/templates/mysql/etc.mysql.cnf.tmpl /etc/mysql/my.cnf
 
 #### START services
+systemctl daemon-reload
+gfnManageServices 'start' 'mysql'
 if [ "$gsSwitch" == "UPGRADE" ]; then # ONLY for upgrade freom Jessie to Stretch
-    /etc/init.d/mysql start
-else
-    systemctl daemon-reload
-    gfnManageServices 'start' 'mysql'
+    systemctl status mysql.service
+    journalctl -xn
 fi
 
 #### Load configs values

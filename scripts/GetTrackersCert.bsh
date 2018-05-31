@@ -58,7 +58,7 @@ esac
 
 #### Removing deleted trackers from the portal
 if [ "$DoDeleteTracker" == "1" ]; then
-	RemovedTrackersList="`cmdMySQL 'MySB_db' "SELECT tracker_domain FROM trackers_list WHERE to_delete='1';"`"
+	RemovedTrackersList="`cmdMySQL 'MySB_db' "SELECT tracker_domain FROM trackers_list WHERE to_delete = '1';"`"
 	for RemovedTracker in $RemovedTrackersList; do
 		log_daemon_msg "$RemoveOfTracker $RemovedTracker"
 		rm -f $MySB_InstallDir/ssl/trackers/*$RemovedTracker.pem
@@ -70,11 +70,11 @@ fi
 #### Renew expirated certificates
 if [ "$DoRenewCertificates" == "1" ]; then
 	Today="`date +%Y-%m-%d`"
-	RemovedTrackersList="`cmdMySQL 'MySB_db' "SELECT tracker_domain FROM trackers_list WHERE cert_expiration='$Today';"`"
+	ExpiratedTrackersList="`cmdMySQL 'MySB_db' "SELECT tracker_domain FROM trackers_list WHERE cert_expiration <= '$Today' AND is_active = '1';"`"
 	for ExpiratedTracker in $ExpiratedTrackersList; do
 		log_daemon_msg "$RenewCertificate $ExpiratedTracker"
 		rm -f $MySB_InstallDir/ssl/trackers/*$RemovedTracker.pem
-		cmdMySQL 'MySB_db' "UPDATE trackers_list SET is_ssl='0', cert_expiration='0000-00-00' WHERE tracker_domain='$ExpiratedTracker';"
+		cmdMySQL 'MySB_db' "UPDATE trackers_list SET is_ssl='0', to_check='1', cert_expiration='0000-00-00' WHERE tracker_domain = '$ExpiratedTracker';"
 		gfnStatusLSB
 	done
 fi
@@ -85,13 +85,10 @@ if [ "$DoCleanCertificates" == "1" ]; then
 	LIST_CERTS=$(ls -la /etc/ssl/certs/ | awk '{ print $9 }')
 	for Cert in ${LIST_CERTS}; do
 		if [ "$Cert" != "" ] && [ "$Cert" != "." ] && [ "$Cert" != ".." ]; then
-
 			TARGET=$(ls -la /etc/ssl/certs/$Cert | awk '{ print $11 }')
-
 			if [ ! -f $TARGET ]; then
 				rm -f /etc/ssl/certs/$Cert
 			fi
-
 			unset Cert TARGET
 		fi
 	done

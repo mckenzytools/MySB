@@ -2,7 +2,7 @@
 		(start at: 2018/03/25)
 			- DNScrypt-proxy, review resolvers list
 			- Let's Encrypt, review renew method
-			- Systemctl, review services management         
+			- Systemctl, review services management
 			- Migration from Jessie to Stretch
 			- Upgrade PHP5 to PHP7
 			- XMLRPC-C to v1.43.7
@@ -11,10 +11,11 @@
 			- Tautulli v2.1.9
 			- PlexMedia v1.13.0.5023
 			- MySB_UpgradeSystem, add cron job every week
+			- GetTrackersCert.bsh, review certificates check and bug fix
 			- Portal
 				* Medoo Framework v1.5.6
 
-            - Fail2Ban, review of actions   
+            - Fail2Ban, review of actions
             - NginX, install from source ? + PageSpeed
 			- Quota
 				* Bug fix for calculate available space

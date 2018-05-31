@@ -1,9 +1,17 @@
-# Package generated configuration file
-# See the sshd_config(5) manpage for details
+#	$OpenBSD: sshd_config,v 1.100 2016/08/15 12:32:04 naddy Exp $
+# This is the sshd server system-wide configuration file.  See
+# sshd_config(5) for more information.
+# This sshd was compiled with PATH=/usr/bin:/bin:/usr/sbin:/sbin
+
+# The strategy used for options in the default sshd_config shipped with
+# OpenSSH is to specify options with their default value where
+# possible, but leave them commented.  Uncommented options override the
+# default value.
 
 # What ports, IPs and protocols we listen for
 Port <port_ssh>
 # Use these options to restrict which interfaces/protocols sshd will bind to
+AddressFamily inet
 ListenAddress 0.0.0.0
 Protocol 2
 # HostKeys for protocol version 2
@@ -16,6 +24,8 @@ UsePrivilegeSeparation yes
 # Lifetime and size of ephemeral version 1 server key
 KeyRegenerationInterval 3600
 ServerKeyBits 768
+# Ciphers and keying
+#RekeyLimit default none
 
 # Logging
 SyslogFacility AUTH
@@ -25,6 +35,8 @@ LogLevel INFO
 LoginGraceTime 120
 PermitRootLogin yes
 StrictModes yes
+#MaxAuthTries 6
+#MaxSessions 10
 
 RSAAuthentication yes
 PubkeyAuthentication yes

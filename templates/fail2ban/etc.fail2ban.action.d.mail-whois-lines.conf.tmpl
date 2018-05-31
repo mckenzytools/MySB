@@ -7,26 +7,19 @@
 [INCLUDES]
 
 before = mail-whois-common.conf
+
 [Definition]
 
 # Option:  actionstart
 # Notes.:  command executed once at the start of Fail2Ban.
 # Values:  CMD
 #
-# actionstart = printf %%b "Hi,\n
-              The jail <name> has been started successfully.\n
-              Regards,\n
-              Fail2Ban"|mail -s "[Fail2Ban] <name>: started on `uname -n`" <dest>
 actionstart =
 
 # Option:  actionstop
 # Notes.:  command executed once at the end of Fail2Ban
 # Values:  CMD
 #
-# actionstop = printf %%b "Hi,\n
-             The jail <name> has been stopped.\n
-             Regards,\n
-             Fail2Ban"|mail -s "[Fail2Ban] <name>: stopped on `uname -n`" <dest>
 actionstop =
 
 # Option:  actioncheck
@@ -72,3 +65,7 @@ dest = root
 # Path to the log files which contain relevant lines for the abuser IP
 #
 logpath = /dev/null
+
+# Number of log lines to include in the email
+#
+grepopts = -m 1000
