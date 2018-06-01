@@ -25,7 +25,7 @@ source $(dirname $0)/../inc/includes_before
 ##################### FIRST LINE #####################################
 
 #### Install packages
-gfnPackageBundleInstall 'mysql-server mysqltuner sqlite3'
+gfnPackageBundleInstall 'mariadb-server mysqltuner sqlite3'
 
 #### Wolf database
 if gfnCheckCommand 0 sqlite3; then
@@ -37,6 +37,14 @@ fi
 
 #### STOP services
 gfnManageServices 'stop' 'mysql'
+
+#### Logrotate
+gfnLogRotate 'mysql-server'
+
+#### Cleaning
+rm -vf /var/log/mysql.log
+rm -vf /var/log/mysql.err
+rm -vf /var/log/mysql/error.log
 
 if [ "$gsSwitch" != "UPGRADE" ]; then
 	#### Temp directory in memory
@@ -52,26 +60,13 @@ if [ "$gsSwitch" != "UPGRADE" ]; then
 	if [ -z "`df -H | grep '/mnt/tmpFS/mysql'`" ]; then
 		mount /mnt/tmpFS/mysql
 	fi
-
-	#### Cleaning
-	rm -vf /var/log/mysql.log
-	rm -vf /var/log/mysql.err
-
-	#### Logrotate
-	gfnLogRotate 'mysql-server'
 fi
 
 #### Config files
-rm -fv /etc/mysql/conf.d/*.cnf
-install -v -o root -g root -m 0600 $MySB_InstallDir/templates/mysql/etc.mysql.cnf.tmpl /etc/mysql/my.cnf
+install -v -o root -g root -m 0600 $MySB_InstallDir/templates/mysql/etc.mysql.cnf.tmpl /etc/mysql/conf.d/mysb.cnf
 
 #### START services
-systemctl daemon-reload
 gfnManageServices 'start' 'mysql'
-if [ "$gsSwitch" == "UPGRADE" ]; then # ONLY for upgrade freom Jessie to Stretch
-    systemctl status mysql.service
-    journalctl -xn
-fi
 
 #### Load configs values
 [ -f /etc/MySB/config_db ] && source /etc/MySB/config_db

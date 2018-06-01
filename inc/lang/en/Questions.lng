@@ -135,7 +135,7 @@ The informations collected are:
 2/	The country where your server is located ($sCountry)
 3/	The ID of your server (/etc/machine-id)
 No other information is sent.
-The access logs are not kept, so the IP address of your server is not preserved.
+The access logs are not kept, so the IP address of your server is not saved.
 
 The purpose of this step is only to know if I should continue to break my ass to maintain MySB ;-)$CEND"
 Questions_SendStatistics="Do you want to report your installation to toulousain79 ? "
