@@ -706,12 +706,6 @@ DisplaySurvey() {
 		fi
 
 		# Statistics
-        if [ "`gfnCheckCommand 1 geoiplookup`" == "YES" ] && [ ! -z "$gsSrvIpAddressExt" ]; then
-            sCountry="`geoiplookup $gsSrvIpAddressExt | awk '{ print $5 }'`"
-            [ -z "$sCountry" ] && sCountry="unknown"
-        else
-            sCountry="unknown"
-        fi
 		echo
 		echo -e "$Questions_Message_Statistics"
 		if [ "$RepeatSurvey" == "YES" ]; then
