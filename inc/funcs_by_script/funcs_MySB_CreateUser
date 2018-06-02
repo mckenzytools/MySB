@@ -416,7 +416,7 @@ gfnUserCrontab() {
 	fi
 	if [ -f $sHomeDir/scripts/crontab ]; then
 		crontab -u $sUser $sHomeDir/scripts/crontab
-		systemctl restart cron &> /dev/null
+        service cron restart > /dev/null
 		rm -f $sHomeDir/scripts/crontab
 	fi
 }

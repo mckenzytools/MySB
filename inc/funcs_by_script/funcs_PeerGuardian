@@ -48,7 +48,7 @@ gfnPeerGuardianFailed() {
 					systemctl status rtorrent-$sUser &> /dev/null
 					if [ $? -eq 0 ]; then
 						gfnStatusLSB 0
-						systemctl restart rtorrent-$sUser
+                        service rtorrent-$sUser restart
 					else
 						gfnStatusLSB 0
 					fi
@@ -66,7 +66,7 @@ gfnPeerGuardianFailed() {
 						systemctl status rtorrent-$sUser &> /dev/null
 						if [ $? -eq 0 ]; then
 							gfnStatusLSB 0
-							systemctl restart rtorrent-$sUser
+                            service rtorrent-$sUser restart
 						else
 							gfnStatusLSB 0
 						fi

@@ -59,7 +59,7 @@ if [ $Swithing -eq 1 ] && [ "$gbIsInstalled_DNScrypt" == "YES" ] && [ "$gbDnsCry
 	systemctl daemon-reload &> /dev/null
 	systemctl disable dnscrypt-proxy &> /dev/null
 	service dnscrypt-proxy update &> /dev/null
-	systemctl restart dnscrypt-proxy &> /dev/null
+    service dnscrypt-proxy restart > /dev/null
 	gfnStatusLSB
 fi
 

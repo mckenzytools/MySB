@@ -358,7 +358,7 @@ gfnSwitchDNS() {
 					if gfnGetPid cron; then systemctl reload cron > /dev/null 2>&1; fi
 					gfnMessage 'info' 'log' 'Crontab added'
 				fi
-				systemctl restart bind9 &> /dev/null
+                service bind9 restart &> /dev/null
 			fi
 		;;
 		'bind')
@@ -385,7 +385,7 @@ gfnSwitchDNS() {
 				sed -i '/forward only;/d' /etc/bind/named.conf.options
 				sed -i '/version/d' /etc/bind/named.conf.options
 				sed -i '/DNScrypt-proxy/d' /etc/bind/named.conf.options
-				systemctl restart bind9 &> /dev/null
+                service bind9 restart &> /dev/null
 			fi
 		;;
 	esac
