@@ -5,6 +5,7 @@
 			- Systemctl, review services management
 			- Migration from Jessie to Stretch
 			- Upgrade PHP5 to PHP7
+			- Replace MySQL with MariaDB
 			- XMLRPC-C to v1.43.7
 			- NextCloud v13.0.2
 			- Composer v1.6.5
