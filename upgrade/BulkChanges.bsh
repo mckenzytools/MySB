@@ -160,7 +160,7 @@ case "$1" in
 
         #### Cleaning
         updatedb
-        for file in $(locate *.dpkg-dist *.dpkg-bak *.ucf-dist); do
+        for file in $(locate *.dpkg-new *.dpkg-dist *.dpkg-bak *.ucf-dist); do
             if [ ! -z "$gbDevMode" ] && [ $gbDevMode -eq 1 ]; then
                 mv -vf $file $MySB_InstallDir/logs/TODEL/
             else
