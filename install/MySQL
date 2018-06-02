@@ -67,6 +67,7 @@ if [ "$gsSwitch" != "UPGRADE" ]; then
 fi
 
 #### Config files
+rm -vf /etc/mysql/my.cnf.fallback
 rm -vf /etc/mysql/conf.d/*.cnf
 rm -vf /etc/mysql/mariadb.conf.d/*.cnf
 install -v -o root -g root -m 0600 $MySB_InstallDir/templates/mysql/etc.mysql.conf.d.my.cnf.tmpl /etc/mysql/my.cnf

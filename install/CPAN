@@ -32,7 +32,6 @@ if [ ! -d /root/.cpan/CPAN ]; then
 fi
 install -v -o root -g root -m 0750 $MySB_InstallDir/templates/cpan/root.cpan.listmodules.pl.tmpl /root/.cpan/listmodules.pl
 install -v -o root -g root -m 0644 $MySB_InstallDir/templates/cpan/root.cpan.CPAN.MyConfig.pm.tmpl /root/.cpan/CPAN/MyConfig.pm
-
 cpan reload cpan
 
 #### Modules install
