@@ -63,6 +63,7 @@ gfnDeleteBadSources() {
 			sed -i '/mirror.neolabs.kz/d' $sSourcesFile
 			sed -i '/debian.bononia.it/d' $sSourcesFile
 			sed -i '/mirrors.evowise.com/d' $sSourcesFile
+ 			sed -i '/ftp.heikorichter.name/d' $sSourcesFile
 		;;
 	esac
 }
