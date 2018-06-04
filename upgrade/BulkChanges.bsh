@@ -131,6 +131,7 @@ case "$1" in
 		rm -vf /usr/share/nano/ini.nanorc
 		rm -vf /etc/apt/sources.list~
         rm -vf /usr/local/bin/rtorrent
+        rm -vf /usr/local/etc/dnscrypt-proxy.conf
 	;;
 	"AFTER")
 		####################################

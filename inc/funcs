@@ -276,14 +276,14 @@ gfnManageServices() {
 						nContinue=1
 
 						case "$Service" in
-							"dnscrypt-proxy"|"webmin")
-								if gfnGetPid $Service; then
-									sFinalCmd="restart"
-								else
-									sFinalCmd="start"
-								fi
-							;;
-							"tautulli"|"$binPhpService"|"stunnel4"|"postfix"|"cron"|"vsftpd"|"nfs-kernel-server"|"mysql"|"plexmediaserver"|"fail2ban"|rtorrent-*)
+                                 
+                                   
+                            
+            
+                          
+          
+         
+							"redis-server"|"dnscrypt-proxy"|"webmin"|"tautulli"|"$binPhpService"|"stunnel4"|"postfix"|"cron"|"vsftpd"|"nfs-kernel-server"|"mysql"|"plexmediaserver"|"fail2ban"|rtorrent-*)
 								nContinue=0
 								if gfnCheckCommand 0 $Service; then
 									if ! gfnGetPid $Service; then
@@ -368,6 +368,7 @@ gfnManageServices() {
 								else
 									sFinalCmd="$sFinalCmd"
 								fi
+                                echo $sFinalCmd
 							;;
 						esac
 

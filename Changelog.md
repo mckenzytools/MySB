@@ -13,11 +13,10 @@
 			- PlexMedia v1.13.0.5023
 			- MySB_UpgradeSystem, add cron job every week
 			- GetTrackersCert.bsh, review certificates check and bug fix
+			- Fail2Ban, review of actions
 			- Portal
 				* Medoo Framework v1.5.6
 
-            - Fail2Ban, review of actions
-            - NginX, install from source ? + PageSpeed
 			- Quota
 				* Bug fix for calculate available space
 				* Add possibility to choice quota per users
