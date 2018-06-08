@@ -276,26 +276,19 @@ gfnManageServices() {
 						nContinue=1
 
 						case "$Service" in
-                                 
-                                   
-                            
-            
-                          
-          
-         
-							"redis-server"|"dnscrypt-proxy"|"webmin"|"tautulli"|"$binPhpService"|"stunnel4"|"postfix"|"cron"|"vsftpd"|"nfs-kernel-server"|"mysql"|"plexmediaserver"|"fail2ban"|rtorrent-*)
-								nContinue=0
-								if gfnCheckCommand 0 $Service; then
-									if ! gfnGetPid $Service; then
-										log_daemon_msg "$Funcs_Starting $Service"
-                                        service $Service start > /dev/null
-									else
-										log_daemon_msg "$Funcs_Restarting $Service"
-                                        service $Service restart > /dev/null
-									fi
-									gfnStatusLSB
-								fi
-							;;
+							# "redis-server"|"dnscrypt-proxy"|"webmin"|"tautulli"|"$binPhpService"|"stunnel4"|"postfix"|"cron"|"vsftpd"|"nfs-kernel-server"|"mysql"|"plexmediaserver"|"fail2ban"|rtorrent-*)
+								# nContinue=0
+								# if gfnCheckCommand 0 $Service; then
+									# if ! gfnGetPid $Service; then
+										# log_daemon_msg "$Funcs_Starting $Service"
+                                        # service $Service start > /dev/null
+									# else
+										# log_daemon_msg "$Funcs_Restarting $Service"
+                                        # service $Service restart > /dev/null
+									# fi
+									# gfnStatusLSB
+								# fi
+							# ;;
 							# "$binPhpService"|"stunnel4"|"postfix"|"cron"|"vsftpd"|"nfs-kernel-server"|"mysql"|"plexmediaserver"|"fail2ban"|rtorrent-*)
 								# nContinue=0
 								# if gfnCheckCommand 0 $Service; then
@@ -362,13 +355,25 @@ gfnManageServices() {
 									gfnStatusLSB
 								fi
 							;;
+							# *)
+								# if ! gfnGetPid $Service; then
+									# sFinalCmd="start"
+								# else
+									# sFinalCmd="$sFinalCmd"
+								# fi
+							# ;;
 							*)
-								if ! gfnGetPid $Service; then
-									sFinalCmd="start"
-								else
-									sFinalCmd="$sFinalCmd"
+								nContinue=0
+								if gfnCheckCommand 0 $Service; then
+									if ! gfnGetPid $Service; then
+										log_daemon_msg "$Funcs_Starting $Service"
+                                        service $Service start > /dev/null
+									else
+										log_daemon_msg "$Funcs_Restarting $Service"
+                                        service $Service restart > /dev/null
+									fi
+									gfnStatusLSB
 								fi
-                                echo $sFinalCmd
 							;;
 						esac
 
