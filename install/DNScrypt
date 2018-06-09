@@ -53,7 +53,7 @@ fi
 #### VARs
 gnDNScryptUpgrade=0
 
-if [ "$gsSwitch" == "FULL-UPDATE" ]; then
+if [ "$gsSwitch" == "CRON" ]; then
     service dnscrypt-proxy full-update
 fi
 

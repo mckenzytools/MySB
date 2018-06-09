@@ -48,7 +48,7 @@ gfnStatusSTD
 #### DNScrypt-proxy (Updating resolvers list)
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $Upgrade_DNScryptFullUpdate$CEND..."
-gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/DNScrypt" 'FULL-UPDATE'
+gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/DNScrypt" 'CRON'
 gfnStatusSTD
 
 #### MySQL
