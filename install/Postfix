@@ -38,6 +38,9 @@ mkdir -pv /var/run/stunnel4
 #### Install packages
 gfnPackageBundleInstall 'postfix stunnel4 gnutls-bin'
 
+#### Stop services
+gfnManageServices stop "postfix stunnel4"
+
 if [ "$SMTP_Provider" != "LOCAL" ]; then
 	#### stunnel
 	if [ -f /var/log/stunnel4/stunnel.log ] && [ ! -h /var/log/stunnel4/stunnel.log ]; then

@@ -178,7 +178,10 @@ if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 		fi
 		ping -c5 github.com
     else
+        gfnManageServices stop "dnscrypt-proxy"
+        sleep 5
         gfnManageServices start "dnscrypt-proxy"
+        sleep 5
 	fi
 
 	#### Check process
