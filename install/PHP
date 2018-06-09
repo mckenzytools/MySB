@@ -95,23 +95,13 @@ for Ext in $sAllExtList; do
 done
 
 #### PEAR/PECL config
-echo
 update-ca-certificates --verbose --fresh &> /dev/null
-echo
 pear config-set auto_discover 1
-echo
 pear config-set php_ini $gsPhpDir/cli/php.ini
-echo
 pear config-set ext_dir $sExtDir
-echo
 pear update-channels
-echo
 pear upgrade --force pear/XML_Util
-echo
 pear upgrade --force
-echo
-pear install -o PEAR
-echo
 
 #### Enable all modules
 for Ext in $sAllExtList; do

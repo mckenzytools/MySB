@@ -79,6 +79,7 @@ CreateCACertificate() {
 	#### 4 - Certificate Authority
 	echo '01' > ./serial
 	touch ./index.txt
+    touch ./index.txt.attr
 
 	openssl req -new -x509 -extensions v3_ca -keyout ./private/cakey.pem -passout pass:$CERTPASS -out ./certs/cacert.pem -days 3650 -config ./MySB_caconfig.cnf
 	openssl req -new -nodes -out ./req.pem -passout pass:$CERTPASS -config ./MySB_caconfig.cnf
