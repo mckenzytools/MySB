@@ -66,10 +66,6 @@ case "$1" in
         install -v -o root -g root -m 0600 $MySB_InstallDir/templates/mysql/etc.mysql.conf.d.my.cnf.tmpl /etc/mysql/my.cnf
         # Stop services
         gfnManageServices 'stop' 'php5-fpm nginx fail2ban stunnel4 cron redis-server'
-        # Redis
-        rm -vrf /etc/redis/ && mkdir -pv /etc/redis/ && chmod -v 0755 /etc/redis/ && chown -v root:root /etc/redis/
-        install -v -o redis -g redis -m 0640 $MySB_InstallDir/templates/other/etc.redis.redis.conf.tmpl /etc/redis/redis.conf
-        gfnPackagesManage purge "redis-server"
         # PHP5
         gfnPackagesManage purge "php5 php5-common php5-cli php5-fpm php-xml-rss php5-dev php-pear php5-curl php5-gd php5-gmp php5-imap php5-intl php5-json php5-mcrypt php5-mysql php5-readline php5-sqlite php5-xmlrpc php5-geoip php5-imagick php5-redis php-pear"
         rm -vrf /usr/share/php/.registry/.channel.pecl.php.net
@@ -89,6 +85,7 @@ case "$1" in
 		rm -vrf $MySB_InstallDir/files/apt_mirrors/mirrors/packagecloud.io
 		rm -vrf $MySB_InstallDir/files/apt_mirrors/mirrors/moblock-deb.sourceforge.net
 		rm -vrf $MySB_InstallDir/files/apt_mirrors/mirrors/shell.ninthgate.se
+        rm -vrf /etc/redis/
 		# Stunnel
 		sed -i '/NO_SSLv2/d' /etc/stunnel/stunnel.conf
 		# Fail2ban
