@@ -7,10 +7,11 @@
 			- Upgrade PHP5 to PHP7
 			- Replace MySQL with MariaDB
 			- XMLRPC-C to v1.43.7
-			- NextCloud v13.0.2
+			- NextCloud v13.0.3
 			- Composer v1.6.5
 			- Tautulli v2.1.9
 			- PlexMedia v1.13.2.5142
+			- Certbot-auto script v0.24.0            
 			- MySB_UpgradeSystem, add cron job every week
 			- GetTrackersCert.bsh, review certificates check and bug fix
 			- Fail2Ban, review of actions

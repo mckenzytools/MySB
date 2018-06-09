@@ -40,11 +40,11 @@ INSERT INTO `repositories` (`type`, `dir`, `name`, `version`, `upgrade`, `file`,
 ('WBM', '<InstallDir>_files', 'OpenVPNadmin Webmin', '3.1', 0, 'openvpn_v3.1.wbm', 'http://www.openit.it/index.php/it/openvpnadmin/download?task=finish&cid=29&catid=7', 1, 0, ''),
 ('WBM', '<InstallDir>_files', 'Nginx Webmin Module', '0.10', 0, 'nginx_v0.10.wbm', 'https://www.justindhoffman.com/sites/justindhoffman.com/files/nginx-0.10.wbm_.gz', 1, 0, ''),
 ('TARGZ', '<InstallDir>/web/apps/la', 'LoadAvg', '2.2', 0, 'loadavg_v2.2.tar.gz', 'http://www.loadavg.com/files/loadavg.tar.gz', 1, 0, ''),
-('ZIP', '<InstallDir>/web/apps/nc', 'NextCloud', '13.0.2', 0, 'nextcloud_v13.0.2.zip', 'https://download.nextcloud.com/server/releases/nextcloud-13.0.2.zip', 1, 0, ''),
+('ZIP', '<InstallDir>/web/apps/nc', 'NextCloud', '13.0.3', 0, 'nextcloud_v13.0.3.zip', 'https://download.nextcloud.com/server/releases/nextcloud-13.0.3.zip', 1, 0, ''),
 ('TARGZ', '<InstallDir>/sources/rkhunter', 'RKHunter', '1.4.6', 0, 'rkhunter_v1.4.6.tar.gz', 'https://github.com/toulousain79/MySB_files/raw/v99.99/rkhunter_v1.4.6.tar.gz', 1, 0, ''),
 ('TARGZ', '<InstallDir>/sources/geoipupdate', 'GeoIPupdate', '2.5.0', 0, 'GeoIPupdate_v2.5.0.tar.gz', 'https://github.com/maxmind/geoipupdate/releases/download/v2.5.0/geoipupdate-2.5.0.tar.gz', 1, 0, ''),
 ('ZIP', '<InstallDir>/web/wolf', 'Wolf CMS', '0.8.3.1', 0, 'wolf_v0.8.3.1.zip', 'https://github.com/toulousain79/MySB_files/raw/v99.99/wolf_v0.8.3.1.zip', 1, 0, ''),
-('TARGZ', '<InstallDir>/web/apps/tt', 'Tautulli', '2.1.9', 0, 'Tautulli_v2.1.9.tar.gz', 'https://github.com/Tautulli/Tautulli/archive/v2.1.9.tar.gz', 1, 0, ''),
+('TARGZ', '<InstallDir>/web/apps/tt', 'Tautulli', '2.1.12', 0, 'Tautulli_v2.1.12.tar.gz', 'https://github.com/Tautulli/Tautulli/archive/v2.1.12.tar.gz', 1, 0, ''),
 ('GIT', '<InstallDir>/sources/libsmbclient-php', 'libsmbclient-php', '0.9.0', 0, 'libsmbclient-php_v0.9.0.zip', 'https://github.com/eduardok/libsmbclient-php.git', 1, 0, ''),
 ('DEB', '<InstallDir>_files', 'Plex Media Server', '1.13.2.5142-3ba6662e9', 0, 'plexmediaserver_1.13.2.5142-3ba6662e9_amd64.deb', 'https://downloads.plex.tv/plex-media-server/1.13.2.5142-3ba6662e9/plexmediaserver_1.13.2.5142-3ba6662e9_amd64.deb', 1, 0, '');
 
