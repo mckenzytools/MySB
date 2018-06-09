@@ -89,6 +89,12 @@ echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_SourcesDebian$CEND..."
 gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/install/SourcesList" 'INSTALL'
 gfnStatusSTD
 
+#### MySB_UpgradeSystem
+(( CurrentSTEP++ ))
+echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_UpgradePackages$CEND..."
+gfnScriptInvoke 'ScreenWAIT' "$MySB_InstallDir/bin/MySB_UpgradeSystem" 'INSTALL'
+gfnStatusSTD
+
 #### Packages
 (( CurrentSTEP++ ))
 echo -e -n "${CBLUE}$CurrentSTEP/$TotalSTEP	- $MySB_Step_NeededPackages$CEND..."
