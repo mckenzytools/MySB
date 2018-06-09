@@ -53,6 +53,10 @@ fi
 #### VARs
 gnDNScryptUpgrade=0
 
+if [ "$gsSwitch" == "FULL-UPDATE" ]; then
+    service dnscrypt-proxy full-update
+fi
+
 if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 	# Check packages to install
 	Packages='ldnsutils libldns-dev rng-tools haveged libsodium18'
