@@ -10,7 +10,7 @@
 			- NextCloud v13.0.3
 			- Composer v1.6.5
 			- Tautulli v2.1.9
-			- PlexMedia v1.13.2.5142
+			- PlexMedia v1.13.2.5154
 			- Certbot-auto script v0.24.0            
 			- MySB_UpgradeSystem, add cron job every week
 			- GetTrackersCert.bsh, review certificates check and bug fix
