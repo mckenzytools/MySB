@@ -5,7 +5,7 @@
 			- Composer v1.6.3
 			- RKHunter v1.4.6
 			- Certbot-auto script v0.22.2
-			- PlexMedia v1.13.2.5142
+			- PlexMedia v1.13.2.5154
 			- Tautulli v2.1.12, PlexPy is renamed, repo moved to https://github.com/Tautulli/Tautulli
 			- PlexMedia, add deb file for x86_64 and increased frequency of update verification
 			- PlexMedia & Tautulli, daily check for new version and install it if needed
