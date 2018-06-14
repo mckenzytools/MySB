@@ -5,6 +5,7 @@
 	delaycompress
 	missingok
 	postrotate
+    notifempty
 		fail2ban-client set logtarget /var/log/fail2ban.log >/dev/null
 	endscript
 	# If fail2ban runs as non-root it still needs to have write access

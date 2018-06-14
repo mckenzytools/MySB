@@ -183,7 +183,7 @@ gfnValidateIP() {
 
 #### Check if FQDN
 gfnCheckFQDN() {
-	local sHostname nReturn sHostResult sPingResult
+	local sHostname nReturn sPingResult sDigResult
 	sHostname="$1"
 	# nReturn = 0: All is OK
 	# nReturn = 1: Is not a FQDN
@@ -192,19 +192,19 @@ gfnCheckFQDN() {
 	nReturn=1
 
 	if [ "`host -N 0 "$sHostname" > /dev/null 2>&1; echo $?`" -eq 0 ]; then
-		sHostResult="`host -N 0 "$sHostname" | awk '{ print $4 }'`"
 		sPingResult="`ping -q -c 1 "$sHostname" | head -n 1 | awk '{ print $3 }' | sed 's/(//g;' | sed 's/)//g;'`"
+        sDigResult="`dig +short $sHostname @resolver1.opendns.com @resolver2.opendns.com @resolver3.opendns.com`"
 
 		if [ "$gsSrvIpAddress" == "$gsSrvIpAddressExt" ]; then
 			#### Case Not behind a firewall (Public IP address)
-			if [ "$sHostResult" == "$gsSrvIpAddressExt" ]; then
+			if [ "$sDigResult" == "$gsSrvIpAddressExt" ]; then
 				nReturn=0	# All is OK
 			else
 				nReturn=2	# FQDN not coresponding to public IP address
 			fi
 		else
 			#### Case behind a firewall (Local IP address)
-			if [ "$sHostResult" == "$gsSrvIpAddressExt" ]; then
+			if [ "$sDigResult" == "$gsSrvIpAddressExt" ]; then
 				if [ "$sPingResult" == "$gsSrvIpAddress" ]; then
 					nReturn=0	# All is OK
 				else
