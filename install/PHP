@@ -164,7 +164,7 @@ echo "tmpfs   /mnt/tmpFS/php tmpfs defaults,nosuid,noatime,mode=1777,size=32M 0 
 if gfnCheckCommand 0 geoipupdate; then geoipupdate; fi
 
 #### START services
-gfnManageServices start "redis-server $binPhpService"
+gfnManageServices start "redis-server $binPhpService nginx"
 
 # -----------------------------------------
 source $(dirname $0)/../inc/includes_after
