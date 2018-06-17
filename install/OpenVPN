@@ -83,6 +83,8 @@ CreateServer() {
 	[ ! -f /var/log/openvpn/openvpn-status.log ] && touch /var/log/openvpn/openvpn-status.log
 	make-cadir /etc/openvpn/easy-rsa
 	ln -sv /etc/openvpn/easy-rsa/openssl-1.0.0.cnf /etc/openvpn/easy-rsa/openssl.cnf
+	touch /etc/openvpn/easy-rsa/keys/index.txt
+    touch /etc/openvpn/easy-rsa/keys/index.txt.attr
 
 	#### Initialize
 	cd /etc/openvpn/easy-rsa/

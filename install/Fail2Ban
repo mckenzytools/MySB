@@ -28,7 +28,7 @@ if [ "$gbToInstall_Fail2Ban" == "YES" ]; then
 	# Check packages to install
 	gfnPackageBundleInstall 'fail2ban'
 
-	#### STOP services
+	#### STOP service
 	gfnManageServices stop "fail2ban"
 
 	# jail.local
@@ -67,11 +67,15 @@ if [ "$gbToInstall_Fail2Ban" == "YES" ]; then
 		cmdMySQL 'MySB_db' "UPDATE services SET to_install='0', is_installed='1' WHERE serv_name='Fail2Ban';" -v
 	fi
 
-	#### Create new security rules
-	gfnScriptInvoke 'source' "$MySB_InstallDir/bin/MySB_SecurityRules" 'create' "$gsSwitch"
+	#### START & STOP service
+	gfnManageServices start "fail2ban"
+    gfnManageServices stop "fail2ban"
 
 	#### logrotate (to run after Security Rules)
 	gfnLogRotate 'fail2ban'
+
+	#### Create new security rules
+	gfnScriptInvoke 'source' "$MySB_InstallDir/bin/MySB_SecurityRules" 'create' "$gsSwitch"
 fi
 
 # -----------------------------------------

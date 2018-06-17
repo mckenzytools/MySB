@@ -79,7 +79,7 @@ fi
 # NextCloud
 sed -i '/NextCloud/d' /tmp/crontab.tmp
 if [ "$gbIsInstalled_NextCloud" == "YES" ]; then
-	echo "10 0 * * * /bin/bash $MySB_InstallDir/scripts/NextCloud.bsh clean CRON > /dev/null 2>&1" | tee -a /tmp/crontab.tmp
+	#echo "10 0 * * * /bin/bash $MySB_InstallDir/scripts/NextCloud.bsh clean CRON > /dev/null 2>&1" | tee -a /tmp/crontab.tmp
 	echo "*/5 * * * * /bin/bash $MySB_InstallDir/scripts/NextCloud.bsh scan CRON > /dev/null 2>&1" | tee -a /tmp/crontab.tmp
 fi
 # PeerGuardian

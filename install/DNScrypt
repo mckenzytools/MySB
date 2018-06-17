@@ -71,7 +71,8 @@ if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 	(( nNumLine++ ))
 	sed -i ""$nNumLine"i\HRNGDEVICE=/dev/urandom" /etc/default/rng-tools
 	systemctl daemon-reload
-	systemctl start rng-tools
+    gfnManageServices stop "rng-tools"
+    gfnManageServices start "rng-tools"
 
 	# Switch to bind
 	gfnSwitchDNS "bind"

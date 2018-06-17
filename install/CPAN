@@ -52,6 +52,10 @@ if [ -z "`perl /root/.cpan/listmodules.pl | grep "^HTTP::Daemon::SSL$"`" ]; then
 	cpan reload cpan
 fi
 
+#### Upgrade
+cpan upgrade
+#cpan -u
+
 #### List all modules
 perl /root/.cpan/listmodules.pl
 

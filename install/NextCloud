@@ -267,7 +267,7 @@ EOF
 		su -s /bin/sh www-data -c "/usr/bin/php $gsNextCloudDir/occ app:enable files_external"
 		su -s /bin/sh www-data -c "/usr/bin/php $gsNextCloudDir/occ app:enable notifications"
 		su -s /bin/sh www-data -c "/usr/bin/php $gsNextCloudDir/occ background:cron"
-		su -s /bin/sh www-data -c "/usr/bin/php $gsNextCloudDir/occ files:cleanup"
+		#su -s /bin/sh www-data -c "/usr/bin/php $gsNextCloudDir/occ files:cleanup"
 		su -s /bin/sh www-data -c "/usr/bin/php $gsNextCloudDir/occ config:system:get version"
 
 		#### Generatinf a new config file
