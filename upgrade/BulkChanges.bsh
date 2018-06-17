@@ -136,6 +136,9 @@ case "$1" in
 		rm -vf /etc/apt/sources.list~
         rm -vf /usr/local/bin/rtorrent
         rm -vf /usr/local/etc/dnscrypt-proxy.conf
+        cd $MySB_Files/
+        git reset --hard
+        git clean -fd
 	;;
 	"AFTER")
 		####################################
