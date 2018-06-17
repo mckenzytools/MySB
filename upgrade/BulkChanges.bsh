@@ -73,6 +73,8 @@ case "$1" in
         # rm -vf /etc/mysql/mariadb.conf.d/*.cnf
         rm -vf /etc/mysql/conf.d/*.cnf
         install -v -o root -g root -m 0600 $MySB_InstallDir/templates/mysql/etc.mysql.conf.d.my.cnf.tmpl /etc/mysql/my.cnf
+        # PEAR
+        pear config-set ext_dir '/usr/lib/php/20151012'
         # Stop services
         gfnManageServices 'stop' 'php5-fpm nginx fail2ban stunnel4 cron redis-server'
         # PHP5
@@ -94,7 +96,6 @@ case "$1" in
 		rm -vrf $MySB_InstallDir/files/apt_mirrors/mirrors/packagecloud.io
 		rm -vrf $MySB_InstallDir/files/apt_mirrors/mirrors/moblock-deb.sourceforge.net
 		rm -vrf $MySB_InstallDir/files/apt_mirrors/mirrors/shell.ninthgate.se
-        rm -vrf /etc/redis/
         # GeoIP
         install -v -o root -g root -m 0644 $MySB_InstallDir/templates/other/usr.local.etc.geoip.conf.tmpl /usr/local/etc/GeoIP.conf
 		# Stunnel
@@ -105,8 +106,9 @@ case "$1" in
 		sed -i '/anyport/d' /etc/fail2ban/jail.local
         # Redis
         gfnPackagesManage purge "redis-server"
-        rm -vrf /etc/redis/ && mkdir -pv /etc/redis/ && chmod -v 0755 /etc/redis/ && chown -v root:root /etc/redis/
-        install -v -o redis -g redis -m 0640 $MySB_InstallDir/templates/other/etc.redis.redis.conf.tmpl /etc/redis/redis.conf
+        rm -vrf /etc/redis/
+        install -v -o root -g root -m 0755 -d "/etc/redis"
+        install -v -o root -g root -m 0777 $MySB_InstallDir/templates/php/etc.redis.redis.conf.tmpl /etc/redis/redis.conf
 		# NginX
 		install -v -o root -g root -m 0600 $MySB_InstallDir/templates/nginx/etc.nginx.nginx.conf.tmpl /etc/nginx/nginx.conf
 		perl -pi -e "s/worker_processes auto;/worker_processes $gsProcessors;/g" /etc/nginx/nginx.conf
@@ -126,8 +128,6 @@ case "$1" in
         rm -f /var/log/nginx/error.log
         rm -f /var/log/nginx/*-error.log
         gfnManageServices 'start' 'nginx stunnel4'
-        # PEAR
-        pear config-set ext_dir '/usr/lib/php/20151012'
         # DNScrypt renew
         if gfnCheckCommand 0 dnscrypt-proxy; then
             install -o root -g root -m 0755 $MySB_InstallDir/templates/init/etc.init.d.dnscrypt-proxy.tmpl /etc/init.d/dnscrypt-proxy
@@ -154,7 +154,7 @@ case "$1" in
 
 		# STOP & START services
 		gfnManageServices stop "ntp stunnel4 postfix $binPhpService nginx dnscrypt-proxy webmin"
-		gfnManageServices start "ntp stunnel4 postfix smbd nginx dnscrypt-proxy webmin"
+		gfnManageServices start "ntp stunnel4 postfix smbd $binPhpService nginx dnscrypt-proxy webmin"
 
 		# Update version info
 		cmdMySQL 'MySB_db' "UPDATE system SET mysb_version = '$gsCurrentVersion' WHERE id_system='1';" -v
