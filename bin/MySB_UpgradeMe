@@ -158,7 +158,7 @@ if [ $Continue -eq 0 ]; then
 	[ -d ${MySB_InstallDir}_backup/temp ] && mv ${MySB_InstallDir}_backup/temp ${MySB_InstallDir}_backup/$gsCurrentVersion
 fi
 
-#### MySB Script GitHub
+#### MySB GitHub merge
 if [ $Continue -eq 0 ]; then
 	echo
 	UpgradeMe_Merge="`echo $UpgradeMe_Merge | sed "s/#current_version#/$gsCurrentVersion/g;" | sed "s/#new_version#/$MySB_NewVersion/g;"`"
@@ -167,6 +167,7 @@ if [ $Continue -eq 0 ]; then
 	gfnCountDown 3
 	echo
 
+    # MySB
 	cd $MySB_InstallDir/
 
 	git fetch --all
@@ -196,6 +197,42 @@ if [ $Continue -eq 0 ]; then
 		git pull
 		if [ $? -gt 0 ]; then
 			Continue=9
+			Error="$UpgradeMe_Error_GitPull"
+		else
+			git stash clear
+		fi
+	fi
+
+    # MySB_files
+	cd $MySB_Files/
+
+	git fetch --all
+	if [ $? -gt 0 ]; then
+		Continue=10
+		Error="$UpgradeMe_Error_GitFetch"
+	fi
+
+	if [ $Continue -eq 0 ]; then
+		git stash
+		if [ $? -gt 0 ]; then
+			Continue=11
+			Error="$UpgradeMe_Error_GitPull"
+		fi
+	fi
+
+	if [ $Continue -eq 0 ]; then
+		git checkout -b $MySB_NewVersion origin/$MySB_NewVersion
+		if [ $? -gt 0 ]; then
+			Continue=12
+			UpgradeMe_Error_GitCheckout="`echo $UpgradeMe_Error_GitCheckout | sed "s/#new_version#/$MySB_NewVersion/g;"`"
+			Error="$UpgradeMe_Error_GitCheckout"
+		fi
+	fi
+
+	if [ $Continue -eq 0 ]; then
+		git pull
+		if [ $? -gt 0 ]; then
+			Continue=13
 			Error="$UpgradeMe_Error_GitPull"
 		else
 			git stash clear

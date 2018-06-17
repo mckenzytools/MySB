@@ -117,6 +117,8 @@ case "$1" in
         rm -f /var/log/nginx/error.log
         rm -f /var/log/nginx/*-error.log
         gfnManageServices 'start' 'nginx stunnel4'
+        # PEAR
+        pear config-set ext_dir '/usr/lib/php/20151012'
         # DNScrypt renew
         if gfnCheckCommand 0 dnscrypt-proxy; then
             install -o root -g root -m 0755 $MySB_InstallDir/templates/init/etc.init.d.dnscrypt-proxy.tmpl /etc/init.d/dnscrypt-proxy

@@ -70,6 +70,9 @@ gfnSendMail() {
 	sUserMail="`cmdMySQL 'MySB_db' "SELECT users_email FROM users_history WHERE users_ident='$sUser';"`"
 
 	if [ ! -z "$sInfo" ]; then log_daemon_msg "$Funcs_SendMail_GenerateHTML [$sUser]"; fi
+	if ! gfnGetPid $binPhpService; then
+        service $binPhpService restart &> /dev/null
+	fi
 	if ! gfnGetPid nginx; then
         service nginx restart &> /dev/null
 	fi

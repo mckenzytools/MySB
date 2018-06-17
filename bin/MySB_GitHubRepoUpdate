@@ -34,9 +34,17 @@ if [ $? -gt 0 ]; then
 fi
 gfnStatusLSB
 
-#### update Git Hub
+#### MySB repo update
 echo
 cd $MySB_InstallDir/
+git fetch origin
+git reset --hard origin/$gsCurrentVersion
+git pull
+echo
+
+#### MySB_files repo update
+echo
+cd $MySB_Files/
 git fetch origin
 git reset --hard origin/$gsCurrentVersion
 git pull
