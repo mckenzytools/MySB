@@ -281,13 +281,13 @@ END
 DELIMITER ;
 DROP TRIGGER IF EXISTS `KeepUserHistory_BeforeDelete`;
 DELIMITER //
-CREATE TRIGGER `KeepUserHistory_BeforeDelete` BEFORE DELETE ON `users`
- FOR EACH ROW BEGIN
-	UPDATE system SET rt_nb_users=rt_nb_users-1 WHERE id_system=1;
-	UPDATE users_history SET deleted_at=DATE_FORMAT(NOW(),'%Y-%m-%d') WHERE id_users=OLD.id_users;
-END
-//
-DELIMITER ;
+-- CREATE TRIGGER `KeepUserHistory_BeforeDelete` BEFORE DELETE ON `users`
+ -- FOR EACH ROW BEGIN
+	-- UPDATE system SET rt_nb_users=rt_nb_users-1 WHERE id_system=1;
+	-- UPDATE users_history SET deleted_at=DATE_FORMAT(NOW(),'%Y-%m-%d') WHERE id_users=OLD.id_users;
+-- END
+-- //
+-- DELIMITER ;
 DROP TRIGGER IF EXISTS `UpdateUsersHistory_BeforeUpdate`;
 DELIMITER //
 CREATE TRIGGER `UpdateUsersHistory_BeforeUpdate` BEFORE UPDATE ON `users`

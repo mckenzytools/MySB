@@ -490,11 +490,17 @@ CREATE TABLE IF NOT EXISTS `users_scripts` (
 -- Contraintes pour la table `port_forwarding_addresses`
 --
 ALTER TABLE `port_forwarding_addresses`
+  DROP FOREIGN KEY IF EXISTS `port_forwarding_addresses_ibfk_1`;
+
+ALTER TABLE `port_forwarding_addresses`
   ADD CONSTRAINT `port_forwarding_addresses_ibfk_1` FOREIGN KEY (`id_port_forwarding`) REFERENCES `port_forwarding` (`id_port_forwarding`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `trackers_list_ipv4`
 --
+ALTER TABLE `trackers_list_ipv4`
+  DROP FOREIGN KEY IF EXISTS `trackers_list_ipv4_ibfk_1`;
+
 ALTER TABLE `trackers_list_ipv4`
   ADD CONSTRAINT `trackers_list_ipv4_ibfk_1` FOREIGN KEY (`id_trackers_list`) REFERENCES `trackers_list` (`id_trackers_list`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -502,23 +508,35 @@ ALTER TABLE `trackers_list_ipv4`
 -- Contraintes pour la table `tracking_rent_history`
 --
 ALTER TABLE `tracking_rent_history`
-  ADD CONSTRAINT `tracking_rent_history_ibfk_2` FOREIGN KEY (`id_users`) REFERENCES `users_history` (`id_users`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  DROP FOREIGN KEY IF EXISTS `tracking_rent_history_ibfk_2`;
+
+ALTER TABLE `tracking_rent_history`
+  ADD CONSTRAINT `tracking_rent_history_ibfk_2` FOREIGN KEY (`id_users`) REFERENCES `users` (`id_users`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `tracking_rent_payments`
 --
 ALTER TABLE `tracking_rent_payments`
-  ADD CONSTRAINT `tracking_rent_payments_ibfk_2` FOREIGN KEY (`id_users`) REFERENCES `users_history` (`id_users`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  DROP FOREIGN KEY IF EXISTS `tracking_rent_payments_ibfk_2`;
+
+ALTER TABLE `tracking_rent_payments`
+  ADD CONSTRAINT `tracking_rent_payments_ibfk_2` FOREIGN KEY (`id_users`) REFERENCES `users` (`id_users`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `tracking_rent_status`
 --
 ALTER TABLE `tracking_rent_status`
-  ADD CONSTRAINT `tracking_rent_status_ibfk_2` FOREIGN KEY (`id_users`) REFERENCES `users_history` (`id_users`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  DROP FOREIGN KEY IF EXISTS `tracking_rent_status_ibfk_2`;
+
+ALTER TABLE `tracking_rent_status`
+  ADD CONSTRAINT `tracking_rent_status_ibfk_2` FOREIGN KEY (`id_users`) REFERENCES `users` (`id_users`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `users_addresses`
 --
+ALTER TABLE `users_addresses`
+  DROP FOREIGN KEY IF EXISTS `users_addresses_ibfk_1`;
+
 ALTER TABLE `users_addresses`
   ADD CONSTRAINT `users_addresses_ibfk_1` FOREIGN KEY (`id_users`) REFERENCES `users` (`id_users`) ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -526,17 +544,26 @@ ALTER TABLE `users_addresses`
 -- Contraintes pour la table `users_crontab`
 --
 ALTER TABLE `users_crontab`
+  DROP FOREIGN KEY IF EXISTS `users_crontab_ibfk_1`;
+
+ALTER TABLE `users_crontab`
   ADD CONSTRAINT `users_crontab_ibfk_1` FOREIGN KEY (`id_users`) REFERENCES `users` (`id_users`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `users_rtorrent_cfg`
 --
 ALTER TABLE `users_rtorrent_cfg`
+  DROP FOREIGN KEY IF EXISTS `users_rtorrent_cfg_ibfk_1`;
+
+ALTER TABLE `users_rtorrent_cfg`
   ADD CONSTRAINT `users_rtorrent_cfg_ibfk_1` FOREIGN KEY (`id_users`) REFERENCES `users` (`id_users`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Contraintes pour la table `users_scripts`
 --
+ALTER TABLE `users_scripts`
+  DROP FOREIGN KEY IF EXISTS `users_scripts_ibfk_1`;
+
 ALTER TABLE `users_scripts`
   ADD CONSTRAINT `users_scripts_ibfk_1` FOREIGN KEY (`id_users`) REFERENCES `users` (`id_users`) ON DELETE CASCADE ON UPDATE CASCADE;
 
