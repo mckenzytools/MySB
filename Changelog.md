@@ -7,9 +7,9 @@
 			- Upgrade PHP5 to PHP7
 			- Replace MySQL with MariaDB
 			- XMLRPC-C to v1.43.7
-			- NextCloud v13.0.3
+			- NextCloud v13.0.4
 			- Composer v1.6.5
-			- Tautulli v2.1.9
+			- Tautulli v2.1.13
 			- PlexMedia v1.13.2.5154
 			- Certbot-auto script v0.24.0
             - NextCloud, remove auto cleanup files
@@ -17,7 +17,7 @@
 			- GetTrackersCert.bsh, review certificates check and bug fix
 			- Fail2Ban, review of actions
 			- Portal
-				* Medoo Framework v1.5.6
+				* Medoo Framework v1.5.7
 
 			- Quota
 				* Bug fix for calculate available space

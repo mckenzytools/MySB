@@ -67,9 +67,8 @@ if [ "$gbToInstall_Fail2Ban" == "YES" ]; then
 		cmdMySQL 'MySB_db' "UPDATE services SET to_install='0', is_installed='1' WHERE serv_name='Fail2Ban';" -v
 	fi
 
-	#### START & STOP service
-	gfnManageServices start "fail2ban"
-    gfnManageServices stop "fail2ban"
+	#### Clean security rules
+	gfnScriptInvoke 'source' "$MySB_InstallDir/bin/MySB_SecurityRules" 'clean' "$gsSwitch"
 
 	#### logrotate (to run after Security Rules)
 	gfnLogRotate 'fail2ban'
