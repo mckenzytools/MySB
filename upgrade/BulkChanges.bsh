@@ -57,6 +57,15 @@ case "$1" in
 		#### To call for every upgrade - EoF
 		####################################
 
+        #### MySB_file checkout
+        cd $MySB_Files/
+        git reset --hard
+        git clean -fd
+        git fetch --all
+        git stash
+        git checkout -b $gsCurrentVersion origin/$gsCurrentVersion
+        git pull
+
 		#### Jessie to Stretch upgrade
         # MySQL to MariaDB
         export DEBIAN_FRONTEND=noninteractive; apt-get -y --assume-yes -f -V -o Dpkg::Options::="--force-confnew" install mariadb-server
@@ -136,9 +145,6 @@ case "$1" in
 		rm -vf /etc/apt/sources.list~
         rm -vf /usr/local/bin/rtorrent
         rm -vf /usr/local/etc/dnscrypt-proxy.conf
-        cd $MySB_Files/
-        git reset --hard
-        git clean -fd
 	;;
 	"AFTER")
 		####################################
