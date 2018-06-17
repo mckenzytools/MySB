@@ -204,7 +204,9 @@ if [ $Continue -eq 0 ]; then
 	fi
 
     # MySB_files
-	cd $MySB_Files/
+    cd $MySB_Files/
+    git reset --hard
+    git clean -fd
 
 	git fetch --all
 	if [ $? -gt 0 ]; then
