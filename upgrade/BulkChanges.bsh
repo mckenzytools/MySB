@@ -149,12 +149,22 @@ case "$1" in
 	"AFTER")
 		####################################
 		#### To call for every upgrade - BoF
+        if gfnCheckCommand 0 ldconfig; then
+            log_daemon_msg "$IncAfter_ConfigureDynamicLinks"
+            /sbin/ldconfig
+            gfnStatusLSB
+        fi
+        #### Free cache server
+        ## To free pagecache, dentries and inodes
+        sync; echo 3 > /proc/sys/vm/drop_caches
+		#### Upgrade in progress page + Start Cron service
+		gfnUpgradeInProgress "off"
 		# Create missing directories and change rights
 		gfnManageDirAndFiles 'global'
 
 		# STOP & START services
-		gfnManageServices stop "ntp stunnel4 postfix $binPhpService nginx dnscrypt-proxy webmin"
-		gfnManageServices start "ntp stunnel4 postfix smbd $binPhpService nginx dnscrypt-proxy webmin"
+		gfnManageServices stop "ntp stunnel4 postfix nginx $binPhpService redis-server dnscrypt-proxy webmin"
+		gfnManageServices start "ntp stunnel4 postfix smbd redis-server $binPhpService nginx dnscrypt-proxy webmin"
 
 		# Update version info
 		cmdMySQL 'MySB_db' "UPDATE system SET mysb_version = '$gsCurrentVersion' WHERE id_system='1';" -v
