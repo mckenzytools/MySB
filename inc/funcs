@@ -877,8 +877,12 @@ fnRuTorrentGlobalConfigs() {
 					gfnDeleteDirectory $bVerbose "$gsRutorrentPluginsDir/$sPlugin"
 				fi
 			;;
-			'mediastream')
+			'markforrsync')
 				bIsActive="`echo ${tabState[10]} | awk '{split($0,a,"|"); print a[2]}'`"
+				[ "$bIsActive" -eq 0 ] && gfnDeleteDirectory $bVerbose "$gsRutorrentPluginsDir/$sPlugin"
+			;;
+			'mediastream')
+				bIsActive="`echo ${tabState[11]} | awk '{split($0,a,"|"); print a[2]}'`"
 				if [ "$bIsActive" -eq 1 ]; then
 					if [ -f $gsRutorrentPluginsDir/$sPlugin/conf.php ]; then
 						perl -pi -e "s/http:\/\/mydomain.com\/stream\/view.php/https:\/\/$gsHostNameFqdn:$gsPort_MySB_HTTPS\/view/g" $gsRutorrentPluginsDir/$sPlugin/conf.php
@@ -888,31 +892,31 @@ fnRuTorrentGlobalConfigs() {
 				fi
 			;;
 			'mobile')
-				bIsActive="`echo ${tabState[11]} | awk '{split($0,a,"|"); print a[2]}'`"
-				[ "$bIsActive" -eq 0 ] && gfnDeleteDirectory $bVerbose "$gsRutorrentPluginsDir/$sPlugin"
-			;;
-			'nfo')
 				bIsActive="`echo ${tabState[12]} | awk '{split($0,a,"|"); print a[2]}'`"
 				[ "$bIsActive" -eq 0 ] && gfnDeleteDirectory $bVerbose "$gsRutorrentPluginsDir/$sPlugin"
 			;;
-			'pausewebui')
+			'nfo')
 				bIsActive="`echo ${tabState[13]} | awk '{split($0,a,"|"); print a[2]}'`"
 				[ "$bIsActive" -eq 0 ] && gfnDeleteDirectory $bVerbose "$gsRutorrentPluginsDir/$sPlugin"
 			;;
-			'ratiocolor')
+			'pausewebui')
 				bIsActive="`echo ${tabState[14]} | awk '{split($0,a,"|"); print a[2]}'`"
 				[ "$bIsActive" -eq 0 ] && gfnDeleteDirectory $bVerbose "$gsRutorrentPluginsDir/$sPlugin"
 			;;
-			'showip')
+			'ratiocolor')
 				bIsActive="`echo ${tabState[15]} | awk '{split($0,a,"|"); print a[2]}'`"
 				[ "$bIsActive" -eq 0 ] && gfnDeleteDirectory $bVerbose "$gsRutorrentPluginsDir/$sPlugin"
 			;;
-			'speedgraph')
+			'showip')
 				bIsActive="`echo ${tabState[16]} | awk '{split($0,a,"|"); print a[2]}'`"
 				[ "$bIsActive" -eq 0 ] && gfnDeleteDirectory $bVerbose "$gsRutorrentPluginsDir/$sPlugin"
 			;;
-			'stream')
+			'speedgraph')
 				bIsActive="`echo ${tabState[17]} | awk '{split($0,a,"|"); print a[2]}'`"
+				[ "$bIsActive" -eq 0 ] && gfnDeleteDirectory $bVerbose "$gsRutorrentPluginsDir/$sPlugin"
+			;;
+			'stream')
+				bIsActive="`echo ${tabState[18]} | awk '{split($0,a,"|"); print a[2]}'`"
 				if [ ""$bIsActive"" -eq 1 ]; then
 					if [ -f $gsRutorrentPluginsDir/$sPlugin/config.php ]; then
 						nNumLine=$(sed -n "/\$username =/=" $gsRutorrentPluginsDir/$sPlugin/config.php)
@@ -937,6 +941,10 @@ fnRuTorrentGlobalConfigs() {
 				else
 					gfnDeleteDirectory $bVerbose "$gsRutorrentPluginsDir/$sPlugin"
 				fi
+			;;
+			'syncplugin')
+				bIsActive="`echo ${tabState[19]} | awk '{split($0,a,"|"); print a[2]}'`"
+				[ "$bIsActive" -eq 0 ] && gfnDeleteDirectory $bVerbose "$gsRutorrentPluginsDir/$sPlugin"
 			;;
 			'diskspace')
 				install -o www-data -g www-data -m 0755 $MySB_InstallDir/templates/rutorrent/plugins.diskspace.action.php.tmpl $gsRutorrentPluginsDir/$sPlugin/action.php

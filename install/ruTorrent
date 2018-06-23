@@ -118,13 +118,19 @@ if [ -f $gsRepoDir/config.php ]; then
 	perl -pi -e "s/define\('SCHEME', 'http'\);/define\('SCHEME', 'https'\);/g" $gsRepoDir/config.php
 fi
 
-#### Pause WebUI
+#### Plugin Pause WebUI
 gfnGetRepoValues 'ruTorrent Plugin Pause WebUI' && gfnRepoManageByType
 
-#### Mobile
+#### Plugin Mobile
 gfnGetRepoValues 'ruTorrent Plugin Mobile' && gfnRepoManageByType
 
-#### Autodl-irssi
+#### Plugin Mark for Rsync
+gfnGetRepoValues 'ruTorrent Plugin Mark for Rsync' && gfnRepoManageByType
+
+#### Plugin Sync
+gfnGetRepoValues 'ruTorrent Plugin Sync' && gfnRepoManageByType
+
+#### Plugin Autodl-irssi
 #gfnGetRepoValues 'ruTorrent Plugin Autodl-irssi' && gfnRepoManageByType
 
 #### Theme
