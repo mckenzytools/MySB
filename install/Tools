@@ -60,17 +60,21 @@ if [ $gnRepoUpgrade -eq 1 ] || [ "$gsSwitch" == "INSTALL" ]; then
 fi
 
 #### Python
+echo
+echo "########## Python"
+echo
 # Update certificates for python
 update-ca-certificates --fresh &> /dev/null
 # Install PyOpenSSL for Python
 pip install PyOpenSSL
 
 #### Bower
-if gfnCheckCommand 0 bower; then
-	bower update --allow-root --config.interactive=false
-else
-	npm install -g bower
-fi
+echo
+echo "########## Bower"
+echo
+npm install -g npm-check-updates
+npm install -g bower
+bower update --allow-root
 
 # -----------------------------------------
 source $(dirname $0)/../inc/includes_after

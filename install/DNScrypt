@@ -131,7 +131,7 @@ if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 		make install
 		# Disable the upgrade job
 		cmdMySQL 'MySB_db' "UPDATE repositories SET upgrade='0' WHERE name='DNScrypt-proxy';" -v
-		#
+
 		bDoFullUpdate=1
 	else
 		bDoFullUpdate=0
@@ -166,7 +166,7 @@ if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 	fi
 	cmdMySQL 'MySB_db' "UPDATE system SET dnscrypt='1' WHERE id_system='1';" -v
 
-    #[ "$gsSwitch" == "UPGRADE" ] && bDoFullUpdate=1
+    [ "$gsSwitch" == "UPGRADE" ] && bDoFullUpdate=1
 
 	#### START services & Update resolvers infos in db
 	if [ $bDoFullUpdate -eq 1 ]; then
@@ -181,13 +181,13 @@ if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 			gfnManageServices start "dnscrypt-proxy"
 			sleep 5
 		fi
-		ping -c5 github.com
     else
         gfnManageServices stop "dnscrypt-proxy"
         sleep 5
         gfnManageServices start "dnscrypt-proxy"
         sleep 5
 	fi
+    ping -c5 github.com
 
 	#### Check process
 	service dnscrypt-proxy status-details
@@ -197,7 +197,7 @@ if [ "$gbToInstall_DNScrypt" == "YES" ]; then
 		#Wait a moment for DNScrypt to start
 		sleep 5
 		if ! gfnGetPid dnscrypt-proxy; then
-			systemctl status dnscrypt-proxy | tee -a $MySB_InstallDir/temp/continue
+			service dnscrypt-proxy status | tee -a $MySB_InstallDir/temp/continue
 		fi
 	fi
 fi

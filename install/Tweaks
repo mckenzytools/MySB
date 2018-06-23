@@ -25,26 +25,14 @@ source $(dirname $0)/../inc/includes_before
 ##################### FIRST LINE #####################################
 
 #### Console tweaks
+echo
+echo "########## Console tweaks"
+echo
 install -v -o root -g root -m 0644 $MySB_InstallDir/templates/tweaks/bashrc.tmpl /root/.bashrc
 install -v -o root -g root -m 0644 $MySB_InstallDir/templates/tweaks/profile.tmpl /root/.profile
 install -v -o root -g root -m 0644 $MySB_InstallDir/templates/tweaks/bash_aliases.tmpl /root/.bash_aliases
 install -v -o root -g root -m 0644 /etc/skel/.bash_logout /root/.bash_logout
-
-#### permanently adding scripts to PATH to all users and root
-if [ -z "`cat /etc/profile | grep 'PATH=' | grep "$MySB_InstallDir/bin"`" ]; then
-	echo "" | tee -a /etc/profile
-	echo "PATH=$PATH:$MySB_InstallDir/bin:/sbin" | tee -a /etc/profile
-	echo "export PATH" | tee -a /etc/profile
-fi
-
-#### Coloration syntaxic for vim
-install -v -o root -g root -m 0644 $MySB_InstallDir/templates/tweaks/etc.vimrc.tmpl /etc/vim/vimrc
-
-#### Nano
-install -v -o root -g root -m 0644 $MySB_InstallDir/templates/tweaks/etc.nanorc.tmpl /etc/nanorc
-
-#### bash_profile
-if [ ! -f /root/.bash_profile ] || [ -z "`cat /root/.bash_profile | grep 'bash_completion'`" ] || [ -z "`cat /root/.bash_profile | grep '.bashrc'`" ]; then
+if [ ! -f /root/.bash_profile ] || [ -z "`grep 'bash_completion' /root/.bash_profile`" ] || [ -z "`grep '.bashrc' /root/.bash_profile`" ]; then
 	(
 	cat <<'EOF'
 if [ -f /etc/bash_completion ]; then
@@ -58,11 +46,34 @@ EOF
 	) | tee -a /root/.bash_profile
 fi
 
+#### permanently adding scripts to PATH to all users and root
+echo
+echo "########## /etc/profile"
+echo
+if [ -z "`cat /etc/profile | grep 'PATH=' | grep "$MySB_InstallDir/bin"`" ]; then
+	echo "" | tee -a /etc/profile
+	echo "PATH=$PATH:$MySB_InstallDir/bin:/sbin" | tee -a /etc/profile
+	echo "export PATH" | tee -a /etc/profile
+fi
+
+#### Editors
+echo
+echo "########## Editors"
+echo
+install -v -o root -g root -m 0644 $MySB_InstallDir/templates/tweaks/etc.vimrc.tmpl /etc/vim/vimrc
+install -v -o root -g root -m 0644 $MySB_InstallDir/templates/tweaks/etc.nanorc.tmpl /etc/nanorc
+
 #### Motd
+echo
+echo "########## Motd"
+echo
 install -v -o root -g root -m 0755 $MySB_InstallDir/templates/tweaks/etc.rc.local.tmpl /etc/rc.local
 perl -pi -e "s/<MySB_Version>/$gsCurrentVersion/g" /etc/rc.local
 
 #### Change timezone
+echo
+echo "########## Timezone"
+echo
 if [ ! -z "$gsTimeZone" ]; then
 	if [ -f /etc/timezone ]; then rm -vf /etc/timezone; fi
 	echo "$gsTimeZone" | tee -a /etc/timezone
@@ -73,9 +84,15 @@ if [ ! -z "$gsTimeZone" ]; then
 fi
 
 #### Sysctl
+echo
+echo "########## Sysctl"
+echo
 install -v -o root -g root -m 0755 $MySB_InstallDir/templates/tweaks/etc.sysctl.conf.tmpl /etc/sysctl.conf
 
 #### Swappiness
+echo
+echo "########## Swappiness"
+echo
 SWAP="`free -m | grep 'Swap' | awk '{ print $2 }'`"
 if [ "$gsMemory" -lt "2048" ] && [ "$SWAP" != "0" ]; then
 	echo 80 > /proc/sys/vm/swappiness
@@ -85,21 +102,31 @@ if [ "$gsMemory" -lt "2048" ] && [ "$SWAP" != "0" ]; then
 fi
 
 #### locale
+echo
+echo "########## Locale"
+echo
 locale > $MySB_InstallDir/files/locale
 
 #### /etc/hostname
+echo
+echo "########## /etc/hostname"
 echo
 if [ -f /etc/hostname ]; then rm -vf /etc/hostname; fi
 echo "$gsHostNameFqdn" | tee -a /etc/hostname
 /bin/sh /etc/init.d/hostname.sh
 
 # /etc/hosts
+echo
+echo "########## /etc/hosts"
+echo
 if [ -z $funcs_MySB_SecurityRules ]; then
 	source $MySB_InstallDir/inc/funcs_by_script/funcs_MySB_SecurityRules
 fi
 gfnCreateHostsFile
 
 #### /etc/network/interfaces
+echo
+echo "########## Remove IPv6"
 echo
 # Remove IPv6
 /sbin/sysctl -w net.ipv6.conf.all.disable_ipv6="1"
@@ -118,9 +145,12 @@ if [ -f /etc/default/grub ]; then
 fi
 rm -fv /etc/pgl/ipv6.*
 
-cp /etc/network/interfaces /etc/network/interfaces.bckp
 # Add iptables-restore
-if [ -z "`cat /etc/network/interfaces | grep 'post-up iptables-restore < /etc/iptables.up.rules'`" ]; then
+echo
+echo "########## Remove IPv6"
+echo
+cp -v /etc/network/interfaces /etc/network/interfaces.bckp
+if [ -z "`grep 'post-up iptables-restore < /etc/iptables.up.rules' /etc/network/interfaces`" ]; then
 	echo >> /etc/network/interfaces
 	nNumLine=$(grep -n "[[:space:]]*iface[[:space:]]*$gsPrimaryInet[[:space:]]*inet [[:space:]]*" /etc/network/interfaces | grep -v "#" | cut -d ':' -f 1)
 	(( nNumLine++ ))
@@ -128,27 +158,34 @@ if [ -z "`cat /etc/network/interfaces | grep 'post-up iptables-restore < /etc/ip
 fi
 
 #### NTP (disable IPv6)
+echo
+echo "########## NTP"
+echo
 install -o root -g root -m 0644 $MySB_InstallDir/templates/tweaks/etc.ntp.conf.tmpl /etc/ntp.conf
 ServicesToRestart="${ServicesToRestart} ntp"
 
-#### RSyslog
-install -o root -g root -m 0644 $MySB_InstallDir/templates/tweaks/etc.rsyslog.conf.tmpl /etc/rsyslog.conf
-ServicesToRestart="${ServicesToRestart} ntp rsyslog"
-
-#### SSH Keygen
-[ ! -d /root/.ssh/ ] && mkdir /root/.ssh/
-[ ! -f /root/.ssh/id_rsa ] && ssh-keygen -q -t rsa -b 2048 -N "" -f /root/.ssh/id_rsa
-
-#### IPtables Logging
+#### Rsyslog
 echo
+echo "########## Rsyslog"
+echo
+install -o root -g root -m 0644 $MySB_InstallDir/templates/tweaks/etc.rsyslog.conf.tmpl /etc/rsyslog.conf
 rm -vf /etc/rsyslog.d/iptables.conf
 [ ! -f /var/log/iptables.log ] && touch /var/log/iptables.log
 echo "if (\$msg contains '[MySB] ' or \$msg contains 'IN=') then /var/log/iptables.log" | tee -a /etc/rsyslog.d/iptables.conf
 echo "& stop" | tee -a /etc/rsyslog.d/iptables.conf
 gfnLogRotate 'iptables'
-ServicesToRestart="rsyslog"
+ServicesToRestart="${ServicesToRestart} rsyslog"
+
+#### SSH Keygen
+echo
+echo "########## SSH Keygen"
+echo
+[ ! -d /root/.ssh/ ] && mkdir /root/.ssh/
+[ ! -f /root/.ssh/id_rsa ] && ssh-keygen -q -t rsa -b 2048 -N "" -f /root/.ssh/id_rsa
 
 #### AES-NI Crypto Acceleration
+echo
+echo "########## AES-NI Crypto Acceleration"
 echo
 if [ ! -z "`grep 'aes' /proc/cpuinfo`" ]; then
 	## load
@@ -162,6 +199,9 @@ if [ ! -z "`grep 'aes' /proc/cpuinfo`" ]; then
 fi
 
 #### Force CPU governor to "performance"
+echo
+echo "########## Force CPU governor to 'performance'"
+echo
 install -o root -g root -m 0644 $MySB_InstallDir/templates/tweaks/etc.default.cpufrequtils.tmpl /etc/default/cpufrequtils
 cpufreq-set -r -g performance
 if [ -f /proc/cpuinfo ]; then
@@ -171,6 +211,9 @@ if [ -f /proc/cpuinfo ]; then
 fi
 
 #### Tweaks for Redis
+echo
+echo "########## Tweaks for Redis"
+echo
 if [ -f /etc/default/grub ]; then
 	source /etc/default/grub
 	if [ ! -z "$GRUB_CMDLINE_LINUX" ] && [ -z "`echo $GRUB_CMDLINE_LINUX | grep 'transparent_hugepage=never'`" ]; then
@@ -182,21 +225,36 @@ if [ -f /etc/default/grub ]; then
 fi
 
 #### Turning off filesystem access times
-if [ -z "`cat /etc/fstab | grep 'errors=remount-ro' | grep 'noatime,nodiratime' | grep -v '/boot'`" ]; then
+echo
+echo "########## Tweaks for Redis"
+echo
+if [ -z "`grep -e 'errors=remount-ro' -e 'noatime,nodiratime' /etc/fstab`" ]; then
 	perl -pi -e "s/errors=remount-ro/noatime,nodiratime,errors=remount-ro/g" /etc/fstab
 fi
 
 #### Cleaning
-if [ -d /var/log/exim4 ]; then rm -rvf /var/log/exim4; fi
-if [ -d /var/log/news ]; then rm -rvf /var/log/news; fi
+echo
+echo "########## Cleaning"
+echo
+rm -rvf /var/log/exim4
+rm -rvf /var/log/news
 
 #### Logrotate
+echo
+echo "########## Logrotate"
+echo
 gfnLogRotate 'mysb'
 
 #### Restart services
+echo
+echo "########## Restart services"
+echo
 gfnManageServices restart "$ServicesToRestart"
 
 #### Create init script for MySB_SecurityRules_Init
+echo
+echo "########## MySB_SecurityRules_Init"
+echo
 install -v -o root -g root -m 0755 $MySB_InstallDir/templates/init/etc.init.d.MySB_SecurityRules_Init.tmpl /etc/init.d/MySB_SecurityRules_Init
 systemctl daemon-reload
 systemctl enable MySB_SecurityRules_Init
