@@ -9,7 +9,7 @@
 			- XMLRPC-C to v1.43.7
 			- NextCloud v13.0.4
 			- Composer v1.6.5
-			- Tautulli v2.1.13
+			- Tautulli v2.1.14
 			- PlexMedia v1.13.2.5154
 			- Certbot-auto script v0.24.0
             - NextCloud, remove auto cleanup files
