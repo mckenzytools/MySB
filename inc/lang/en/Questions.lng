@@ -54,7 +54,7 @@ ${CYELLOW}However, you will still need to add at least one IP to the next questi
 Just remember that Fail2Ban and PeerGuardian can block you if you do not enable this feature...$CEND"
 Questions_UseIprestriction="Do you want to activate the IP restriction ?"
 
-Questions_Message_AddAddresses="${CYELLOW}Now add at least one of your public IP addresses that will allowed to connect to your server for all services (white list).
+Questions_Message_AddAddresses="${CYELLOW}Now add at least one of your (public or private) IP addresses that will allowed to connect to your server for all services (white list).
 You will be able to manage this list later on the portal, and also to add dynamic IP addresses managed with hostnames (DynDNS, No-IP, ...).$CEND"
 Questions_AddAddresses="What are the public IP addresses that you want to add now ? (ex: x.x.x.x,y.y.y.y)"
 

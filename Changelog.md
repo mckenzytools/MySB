@@ -18,6 +18,9 @@
 			- Fail2Ban, review of actions
 			- Portal
 				* Medoo Framework v1.5.7
+			- ruTorrent Plugins
+				* Mark for Rsync
+				* Sync Plugin
 
 			- Quota
 				* Bug fix for calculate available space

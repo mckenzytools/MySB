@@ -62,7 +62,6 @@ fi
 #### Python
 echo
 echo "########## Python"
-echo
 # Update certificates for python
 update-ca-certificates --fresh &> /dev/null
 # Install PyOpenSSL for Python
@@ -71,7 +70,6 @@ pip install PyOpenSSL
 #### Bower
 echo
 echo "########## Bower"
-echo
 npm install -g npm-check-updates
 npm install -g bower
 bower update --allow-root

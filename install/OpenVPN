@@ -86,6 +86,9 @@ CreateServer() {
     mkdir -pv /etc/openvpn/easy-rsa/keys
 	touch /etc/openvpn/easy-rsa/keys/index.txt
     touch /etc/openvpn/easy-rsa/keys/index.txt.attr
+	cat /etc/openvpn/easy-rsa/keys/index.txt
+    cat /etc/openvpn/easy-rsa/keys/index.txt.attr
+    echo
 
 	#### Initialize
 	cd /etc/openvpn/easy-rsa/

@@ -54,7 +54,7 @@ ${CYELLOW}Toutefois, vous aurez toujours besoin d'ajouter au moins une adresse I
 Rappelez-vous simplement que Fail2Ban et PeerGuardian peuvent vous bloquer si vous n'activez pas cette fonction...$CEND"
 Questions_UseIprestriction="Voulez-vous pour activer la restriction IP ?"
 
-Questions_Message_AddAddresses="${CYELLOW}Ajouter maintenant, au moins une de vos adresses IP publiques qui seront autorisées à se connecter à votre serveur pour tous les services (liste blanche).
+Questions_Message_AddAddresses="${CYELLOW}Ajouter maintenant, au moins une de vos adresses IP (publiques ou privées) qui seront autorisées à se connecter à votre serveur pour tous les services (liste blanche).
 Vous serez en mesure de gérer cette liste plus tard sur le portail, et aussi d'ajouter des adresses IP dynamiques gérées avec des noms d'hôtes (DynDNS, No-IP, ...).$CEND"
 Questions_AddAddresses="Quelles sont les adresses IP publiques que vous souhaitez ajouter dès maintenant ? (ex: x.x.x.x,y.y.y.y)"
 
