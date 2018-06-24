@@ -16,11 +16,9 @@
 			- MySB_UpgradeSystem, add cron job every week
 			- GetTrackersCert.bsh, review certificates check and bug fix
 			- Fail2Ban, review of actions
+            - rTorrent, review init script
 			- Portal
 				* Medoo Framework v1.5.7
-			- ruTorrent Plugins
-				* Mark for Rsync
-				* Sync Plugin
 
 			- Quota
 				* Bug fix for calculate available space
