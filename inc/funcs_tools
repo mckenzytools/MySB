@@ -630,7 +630,7 @@ gfnRepoManageByType() {
 			;;
 		esac
 
-        dos2unix $gsRepoDir/*
+        dos2unix $gsRepoDir/* &> /dev/null
 	fi
 }
 
