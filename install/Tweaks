@@ -213,7 +213,7 @@ fi
 #### Turning off filesystem access times
 echo
 echo "########## Tweaks for Redis"
-if [ -z "`grep -e 'errors=remount-ro' -e 'noatime,nodiratime' /etc/fstab`" ]; then
+if [ -z "`grep 'noatime,nodiratime' /etc/fstab`" ]; then
 	perl -pi -e "s/errors=remount-ro/noatime,nodiratime,errors=remount-ro/g" /etc/fstab
 fi
 

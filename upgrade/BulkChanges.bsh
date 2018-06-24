@@ -69,14 +69,17 @@ case "$1" in
 		#### Jessie to Stretch upgrade
         # MySQL to MariaDB
         export DEBIAN_FRONTEND=noninteractive; apt-get -y --assume-yes -f -V -o Dpkg::Options::="--force-confnew" install mariadb-server
-        # mkdir -vp /etc/mysql/mariadb.conf.d
-        # rm -vf /etc/mysql/mariadb.conf.d/*.cnf
         rm -vf /etc/mysql/conf.d/*.cnf
         install -v -o root -g root -m 0600 $MySB_InstallDir/templates/mysql/etc.mysql.conf.d.my.cnf.tmpl /etc/mysql/my.cnf
         # PEAR
         pear config-set ext_dir '/usr/lib/php/20151012'
         # Stop services
         gfnManageServices 'stop' 'php5-fpm nginx fail2ban stunnel4 cron redis-server'
+        # PageSpeed
+        [ ! -z "`mount -l | grep pagespeed`" ] && umount /mnt/tmpFS/pagespeed
+        sed -i '/# TMPFS - Nginx PageSpeed/d' /etc/fstab
+        sed -i '/\/mnt\/tmpFS\/pagespeed/d' /etc/fstab
+        rm -rfv /mnt/tmpFS/pagespeed
         # PHP5
         gfnPackagesManage purge "php5 php5-common php5-cli php5-fpm php-xml-rss php5-dev php-pear php5-curl php5-gd php5-gmp php5-imap php5-intl php5-json php5-mcrypt php5-mysql php5-readline php5-sqlite php5-xmlrpc php5-geoip php5-imagick php5-redis php-pear"
         rm -vrf /usr/share/php/.registry/.channel.pecl.php.net

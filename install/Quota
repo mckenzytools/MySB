@@ -30,10 +30,18 @@ case `getconf LONG_BIT` in
 esac
 
 #### Quota, add journaled quotas to the interested partition
+echo
+echo "########## /etc/fstab"
 cat /etc/fstab
+echo
+echo
+
+# Quota for Hetzner
 if [ "$gsServerProvider" == "HETZNER" ]; then
 	# /
-	sRootDir="`cat /etc/fstab | grep ' / '`"
+    echo
+    echo "########## HETZNER /"
+    sRootDir="`grep ' / ' /etc/fstab | sed '/^#/d'`"
 	sOptions="`echo $sRootDir | sed "s/defaults/noatime,nodiratime,errors=remount-ro,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=$sVFSV/g;"`"
 	sRootDirEscaped="`echo $sOptions | sed s,/,\\\\\\\\\\/,g`"
 	nNumLine=$(cat /etc/fstab | grep ' / ' -n -m 1 | cut -d ':' -f 1)
@@ -42,7 +50,9 @@ if [ "$gsServerProvider" == "HETZNER" ]; then
 	echo "" >> /etc/fstab
 	perl -pi -e "s/<sRootDir>/$sRootDirEscaped/g" /etc/fstab
 	# /home
-	sRootDir="`cat /etc/fstab | grep ' /home '`"
+    echo
+    echo "########## HETZNER /home"
+    sRootDir="`grep ' /home ' /etc/fstab`"
 	if [ ! -z "$sRootDir" ]; then
 		sOptions="`echo $sRootDir | sed "s/defaults/noatime,nodiratime,errors=remount-ro,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=$sVFSV/g;"`"
 		sRootDirEscaped="`echo $sOptions | sed s,/,\\\\\\\\\\/,g`"
@@ -53,12 +63,14 @@ if [ "$gsServerProvider" == "HETZNER" ]; then
 		perl -pi -e "s/<sRootDir>/$sRootDirEscaped/g" /etc/fstab
 	fi
 else
-	if [ ! -z "`cat /etc/fstab | grep 'noatime,nodiratime,errors=remount-ro'`" ] && [ -z "`cat /etc/fstab | grep 'usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv' | grep -v '/boot'`" ]; then
+	if [ ! -z "`grep 'noatime,nodiratime,errors=remount-ro' /etc/fstab`" ] && [ -z "`grep 'usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=vfsv' /etc/fstab | grep -v '/boot'`" ]; then
 		perl -pi -e "s/noatime,nodiratime,errors=remount-ro/noatime,nodiratime,errors=remount-ro,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=$sVFSV/g" /etc/fstab
 		sed -i "/\/boot/s/noatime,nodiratime,errors=remount-ro,usrjquota=aquota.user,grpjquota=aquota.group,jqfmt=$sVFSV/noatime,nodiratime,errors=remount-ro/g" /etc/fstab
 	fi
 fi
 # Delete empty lines
+echo
+echo "########## /etc/fstab"
 sed -i '/^$/d' /etc/fstab
 cat /etc/fstab
 

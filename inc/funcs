@@ -803,7 +803,7 @@ fnRuTorrentGlobalConfigs() {
 						sed -i "/'zip'/s/'';/'\/usr\/bin\/zip';/g" $gsRutorrentPluginsDir/$sPlugin/conf.php
 						sed -i "/'unzip'/s/'';/'\/usr\/bin\/unzip';/g" $gsRutorrentPluginsDir/$sPlugin/conf.php
 						sed -i "/'tar'/s/'';/'\/bin\/tar';/g" $gsRutorrentPluginsDir/$sPlugin/conf.php
-						if [ -z "`cat $gsRutorrentPluginsDir/$sPlugin/conf.php | grep '$pathToExternals\['bzip2'\]'`" ]; then
+						if [ -z "`grep '/bin/bzip2' $gsRutorrentPluginsDir/$sPlugin/conf.php`" ]; then
 							nNumLine=$(cat $gsRutorrentPluginsDir/$sPlugin/conf.php | grep '\/bin\/tar' -n -m 1 | cut -d ':' -f 1)
 							(( nNumLine++ ))
 							sed -i "${nNumLine}i\$pathToExternals['bzip2'] = '\/bin\/bzip2';" $gsRutorrentPluginsDir/$sPlugin/conf.php
@@ -948,37 +948,35 @@ fnRuTorrentGlobalConfigs() {
 			;;
 			'diskspace')
 				install -o www-data -g www-data -m 0755 $MySB_InstallDir/templates/rutorrent/plugins.diskspace.action.php.tmpl $gsRutorrentPluginsDir/$sPlugin/action.php
+				if [ -f $gsRutorrentPluginsDir/$sPlugin/conf.php ]; then
+					perl -pi -e "s/$notifySpaceLimit = 512;/$notifySpaceLimit = 4096;/g" $gsRutorrentPluginsDir/$sPlugin/conf.php
+				fi                
 			;;
 			'cpuload')
-				if [ -f $gsRutorrentPluginsDir/cpuload/conf.php ]; then
-					perl -pi -e "s/$processorsCount = null;/$processorsCount = $gsProcessors;/g" $gsRutorrentPluginsDir/cpuload/conf.php
+				if [ -f $gsRutorrentPluginsDir/$sPlugin/conf.php ]; then
+					perl -pi -e "s/$processorsCount = null;/$processorsCount = $gsProcessors;/g" $gsRutorrentPluginsDir/$sPlugin/conf.php
 				fi
 			;;
 			'create')
-				if [ -f $gsRutorrentPluginsDir/create/conf.php ]; then
-					perl -pi -e "s/$useExternal = false;/$useExternal = 'buildtorrent';/g" $gsRutorrentPluginsDir/create/conf.php
-					sed -i "/pathToCreatetorrent/s/'';/'\/usr\/bin\/buildtorrent';/g" $gsRutorrentPluginsDir/create/conf.php
-				fi
-			;;
-			'diskspace')
-				if [ -f $gsRutorrentPluginsDir/diskspace/conf.php ]; then
-					perl -pi -e "s/$notifySpaceLimit = 512;/$notifySpaceLimit = 4096;/g" $gsRutorrentPluginsDir/diskspace/conf.php
+				if [ -f $gsRutorrentPluginsDir/$sPlugin/conf.php ]; then
+					perl -pi -e "s/$useExternal = false;/$useExternal = 'buildtorrent';/g" $gsRutorrentPluginsDir/$sPlugin/conf.php
+					sed -i "/pathToCreatetorrent/s/'';/'\/usr\/bin\/buildtorrent';/g" $gsRutorrentPluginsDir/$sPlugin/conf.php
 				fi
 			;;
 			'geoip')
-				if [ -f $gsRutorrentPluginsDir/geoip/conf.php ]; then
-					perl -pi -e "s/$dnsResolver = '8.8.8.8';/$dnsResolver = null;/g" $gsRutorrentPluginsDir/geoip/conf.php
+				if [ -f $gsRutorrentPluginsDir/$sPlugin/conf.php ]; then
+					perl -pi -e "s/$dnsResolver = '8.8.8.8';/$dnsResolver = null;/g" $gsRutorrentPluginsDir/$sPlugin/conf.php
 				fi
 			;;
 			'mediainfo')
-				if [ -f $gsRutorrentPluginsDir/mediainfo/conf.php ]; then
-					sed -i "/'mediainfo'/s/'';/'\/usr\/bin\/mediainfo';/g" $gsRutorrentPluginsDir/mediainfo/conf.php
-					perl -pi -e "s/scars,user1,user2//g" $gsRutorrentPluginsDir/mediainfo/conf.php
+				if [ -f $gsRutorrentPluginsDir/$sPlugin/conf.php ]; then
+					sed -i "/'mediainfo'/s/'';/'\/usr\/bin\/mediainfo';/g" $gsRutorrentPluginsDir/$sPlugin/conf.php
+					perl -pi -e "s/scars,user1,user2//g" $gsRutorrentPluginsDir/$sPlugin/conf.php
 				fi
 			;;
 			'screenshots')
-				if [ -f $gsRutorrentPluginsDir/screenshots/conf.php ]; then
-					sed -i "/'ffmpeg'/s/'';/'\/usr\/bin\/ffmpeg';/g" $gsRutorrentPluginsDir/screenshots/conf.php
+				if [ -f $gsRutorrentPluginsDir/$sPlugin/conf.php ]; then
+					sed -i "/'ffmpeg'/s/'';/'\/usr\/bin\/ffmpeg';/g" $gsRutorrentPluginsDir/$sPlugin/conf.php
 				fi
 			;;
 			'theme')
