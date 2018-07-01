@@ -630,7 +630,7 @@ gfnRepoManageByType() {
 			;;
 		esac
 
-        dos2unix $gsRepoDir/* &> /dev/null
+        find $gsRepoDir/ -type f -print0 | xargs -0 dos2unix &> /dev/null
 	fi
 }
 
