@@ -40,6 +40,7 @@ port  		= <NginX_Ports>
 filter 		= nginx-badbots
 logpath 	= /var/log/nginx/*access.log
 banaction 	= iptables-multiport
+maxretry 	= 1
 
 [nginx-login]
 enabled 	= true
