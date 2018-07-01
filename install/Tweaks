@@ -46,12 +46,12 @@ EOF
 fi
 
 #### permanently adding scripts to PATH to all users and root
-echo
-echo "########## /etc/profile"
-if [ -z "`cat /etc/profile | grep 'PATH=' | grep "$MySB_InstallDir/bin"`" ]; then
-	echo "" | tee -a /etc/profile
-	echo "PATH=$PATH:$MySB_InstallDir/bin:/sbin" | tee -a /etc/profile
-	echo "export PATH" | tee -a /etc/profile
+if [ -z "`grep "$MySB_InstallDir/bin" /etc/profile`" ]; then
+    echo
+    echo "########## /etc/profile"
+    echo "" >> /etc/profile
+    echo "# MySB" >> /etc/profile
+    echo "PATH=$PATH:$MySB_InstallDir/bin:/sbin" | tee -a /etc/profile
 fi
 
 #### Editors
@@ -84,10 +84,10 @@ echo "########## Sysctl"
 install -v -o root -g root -m 0755 $MySB_InstallDir/templates/tweaks/etc.sysctl.conf.tmpl /etc/sysctl.conf
 
 #### Swappiness
-echo
-echo "########## Swappiness"
 SWAP="`free -m | grep 'Swap' | awk '{ print $2 }'`"
 if [ "$gsMemory" -lt "2048" ] && [ "$SWAP" != "0" ]; then
+    echo
+    echo "########## Swappiness"
     echo 80 | tee -a /proc/sys/vm/swappiness
 	if [ -z "`grep 'vm.swappiness' /etc/sysctl.conf`" == "" ]; then
 		echo "vm.swappiness = 80" | tee -a /etc/sysctl.conf
