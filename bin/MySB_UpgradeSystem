@@ -102,13 +102,19 @@ update-ca-certificates --verbose --fresh
 
 #### Cleaning
 updatedb
-for file in $(locate *.dpkg-new *.dpkg-dist *.dpkg-bak *.ucf-dist); do
+NewFiles=$(locate *.dpkg-new *.dpkg-dist *.dpkg-bak *.ucf-dist)
+for file in $NewFiles; do
     if [ ! -z "$gbDevMode" ] && [ $gbDevMode -eq 1 ]; then
         mv -vf $file $MySB_InstallDir/logs/TODEL/
     else
         rm -vf $file
     fi
 done
+
+#### PHP
+if [ ! -z "`echo $NewFiles | grep "$gsPhpDir"`" ]; then
+    gfnScriptInvoke 'ScreenSTD' "$MySB_InstallDir/install/PHP" 'UPGRADE'
+fi
 
 # -----------------------------------------
 source $(dirname $0)/../inc/includes_after
