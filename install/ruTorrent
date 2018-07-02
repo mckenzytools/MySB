@@ -133,12 +133,11 @@ gfnGetRepoValues 'ruTorrent Plugin Sync' && gfnRepoManageByType
 #### Plugin Autodl-irssi
 #gfnGetRepoValues 'ruTorrent Plugin Autodl-irssi' && gfnRepoManageByType
 
-#### Theme
-echo
-echo "########## Plugin Theme"
-echo
-# Oblivion
+#### ruTorrent Theme Oblivion
 if [ -z "`grep 'for Oblivion' $gsRutorrentDir/css/style.css`" ]; then
+    echo
+    echo "########## ruTorrent Theme Oblivion"
+    echo
 	echo "" >> $gsRutorrentDir/css/style.css
 	echo "/* for Oblivion */" | tee -a $gsRutorrentDir/css/style.css
 	echo ".meter-value-start-color { background-color: #E05400 }" | tee -a $gsRutorrentDir/css/style.css
@@ -146,9 +145,9 @@ if [ -z "`grep 'for Oblivion' $gsRutorrentDir/css/style.css`" ]; then
 	echo "::-webkit-scrollbar {width:12px;height:12px;padding:0px;margin:0px;}" | tee -a $gsRutorrentDir/css/style.css
 fi
 perl -pi -e "s/\$defaultTheme \= \"\"\;/\$defaultTheme \= \"Oblivion\"\;/g" $gsRutorrentPluginsDir/theme/conf.php
-# club-QuickBox
+#### ruTorrent Theme club-QuickBox
 gfnGetRepoValues 'ruTorrent Theme club-QuickBox' && gfnRepoManageByType
-# MaterialDesign
+#### ruTorrent Theme MaterialDesign
 gfnGetRepoValues 'ruTorrent Theme MaterialDesign' && gfnRepoManageByType
 
 #### ruTorrent favicons trackers

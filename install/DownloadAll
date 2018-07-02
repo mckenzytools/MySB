@@ -65,7 +65,9 @@ cmdMySQL 'MySB_db' "SELECT name FROM repositories WHERE 1;" | while read sRepoNa
 		case "$sRepoName" in
 			'NextCloud')
 				if [ -f $gsNextCloudDir/config/config.php ]; then
-					su -s /bin/sh www-data -c "/usr/bin/php $gsNextCloudDir/occ maintenance:mode --on"
+                    if gfnCheckCommand 0 php; then
+                        su -s /bin/sh www-data -c "/usr/bin/php $gsNextCloudDir/occ maintenance:mode --on"
+                    fi
 					mv -v $gsNextCloudDir/config/config.php $MySB_InstallDir/temp/nextcloud_config.php
 				fi
 				if [ -d $gsNextCloudDir/apps2 ]; then

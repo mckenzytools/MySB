@@ -53,6 +53,10 @@ gfnPackageBundleInstall() {
 	sPackagesToInstall="`echo $sPackagesToInstall | xargs -n1 | sort -u | xargs | sed -e 's/^ //g;' | sed 's/\s+$//'`"
 	if [ ! -z "$sPackagesToInstall" ]; then
 		gfnPackagesManage install "$sPackagesToInstall" "$sOption"
+    else
+        for sPackage in $sPackagesRequired; do
+            echo "$sPackage is already installed !"
+        done
 	fi
 }
 
