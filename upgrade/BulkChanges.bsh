@@ -64,7 +64,7 @@ case "$1" in
         git fetch --all
         git stash
         git checkout -b $gsCurrentVersion origin/$gsCurrentVersion
-        git pull
+        git pull origin $gsCurrentVersion
 
 		#### Jessie to Stretch upgrade
         # MySQL to MariaDB

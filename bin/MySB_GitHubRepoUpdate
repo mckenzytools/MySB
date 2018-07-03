@@ -39,7 +39,7 @@ echo
 cd $MySB_InstallDir/
 git fetch origin
 git reset --hard origin/$gsCurrentVersion
-git pull
+git pull origin $gsCurrentVersion
 echo
 
 #### MySB_files repo update
@@ -47,7 +47,7 @@ echo
 cd $MySB_Files/
 git fetch origin
 git reset --hard origin/$gsCurrentVersion
-git pull
+git pull origin $gsCurrentVersion
 echo
 
 #### Create directories & change rights

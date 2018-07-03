@@ -448,7 +448,7 @@ gfnCleanBeforeUpgrade() {
 		rm -fv $MySB_InstallDir/$sFileType
 	done
 	cd $MySB_InstallDir/
-	git pull
+	git pull origin $gsCurrentVersion
 }
 
 #### Get Values Repositories

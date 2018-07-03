@@ -31,7 +31,7 @@ gfnPackageBundleInstall 'shellinabox'
 gfnManageServices stop "nginx shellinabox"
 
 #### Config
-perl -pi -e "s/SHELLINABOX_ARGS=\"--no-beep\"/SHELLINABOX_ARGS=\"--no-beep --localhost-only\"/g" /etc/default/shellinabox
+install -v -o root -g root -m 0644 $MySB_InstallDir/templates/other/etc.default.shellinabox.tmpl /etc/default/shellinabox
 
 #### NginX
 install -v -o root -g root -m 0644 $MySB_InstallDir/templates/nginx/etc.nginx.locations.shellinabox.conf.tmpl /etc/nginx/locations/ShellInABox.conf

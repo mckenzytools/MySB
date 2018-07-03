@@ -40,7 +40,7 @@ else
 	cd $MySB_Files/
 	git fetch origin
 	git reset --hard origin/$gsCurrentVersion
-	git pull
+	git pull origin $gsCurrentVersion
 fi
 
 #### Get all repos

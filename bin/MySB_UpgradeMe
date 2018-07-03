@@ -194,7 +194,7 @@ if [ $Continue -eq 0 ]; then
 	fi
 
 	if [ $Continue -eq 0 ]; then
-		git pull
+		git pull origin $MySB_NewVersion
 		if [ $? -gt 0 ]; then
 			Continue=9
 			Error="$UpgradeMe_Error_GitPull"
@@ -232,7 +232,7 @@ if [ $Continue -eq 0 ]; then
 	fi
 
 	if [ $Continue -eq 0 ]; then
-		git pull
+		git pull origin $MySB_NewVersion
 		if [ $? -gt 0 ]; then
 			Continue=13
 			Error="$UpgradeMe_Error_GitPull"
