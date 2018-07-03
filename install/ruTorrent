@@ -44,6 +44,7 @@ gfnPackageBundleInstall 'sox'
 
 #### ruTorrent + Official Plugins
 gfnGetRepoValues 'ruTorrent' && gfnRepoManageByType
+rm -vf $gsRepoDir/plugins/extsearch/engines/NNMClub.php
 
 #### Plugin Chat
 gfnGetRepoValues 'ruTorrent Plugin Chat' && gfnRepoManageByType
