@@ -6,11 +6,13 @@
 			- Migration from Jessie to Stretch
 			- Upgrade PHP5 to PHP7
 			- Replace MySQL with MariaDB
-			- XMLRPC-C to v1.43.7
 			- NextCloud v13.0.4
 			- Composer v1.6.5
 			- Tautulli v2.1.14
 			- PlexMedia v1.13.2.5154
+			- XMLRPC-C to v1.51.1
+            - rTorrent v0.9.7
+            - LibTorrent v0.13.7
 			- Certbot-auto script v0.25.1
             - NextCloud, remove auto cleanup files
 			- MySB_UpgradeSystem, add cron job every week
