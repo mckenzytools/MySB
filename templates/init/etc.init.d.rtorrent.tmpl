@@ -61,9 +61,9 @@ gsBinDesc="rTorrent for $gsUsername"
  # rTorrent bin
 rTorrentVersion="`cmdMySQL 'MySB_db' "SELECT rtorrent_version FROM users WHERE users_ident='$gsUsername';"`"
 case "$rTorrentVersion" in
-	"v0.9.6")	binRtorrent="/usr/bin/rtorrent";;
-	"v0.9.7")	binRtorrent="/usr/local/bin/rtorrent";;
-	*)			binRtorrent="/usr/bin/rtorrent";;
+    "v0.9.6")   binRtorrent="/usr/bin/rtorrent";;
+    "v0.9.7")   binRtorrent="/usr/local/bin/rtorrent";;
+    *)          binRtorrent="/usr/bin/rtorrent";;
 esac
 binScreen="/usr/bin/screen" # Screen binary
 #------------------------------------------------------------
