@@ -39,7 +39,7 @@ if [ $gnRepoUpgrade -eq 1 ] || [ "$gsSwitch" == "INSTALL" ]; then
 	if [ -f config.mk ] && [ -f common.mk ]; then
 		make clean
 	fi
-	./configure --disable-abyss-server --disable-cgi-server --disable-cplusplus --disable-libwww-client --disable-wininet-client
+	./configure --disable-abyss-server --disable-abyss-threads --disable-abyss-openssl --disable-cgi-server --disable-cplusplus --disable-libwww-client --disable-wininet-client
 	make -j$gsProcessors
 	make install
 	# Disable the upgrade job
@@ -56,6 +56,7 @@ if [ $gnRepoUpgrade -eq 1 ] || [ "$gsSwitch" == "INSTALL" ]; then
 	./configure --with-posix-fallocate
 	make -j$gsProcessors
 	make install
+    ldconfig
 	# Disable the upgrade job
 	cmdMySQL 'MySB_db' "UPDATE repositories SET upgrade='0' WHERE name='LibTorrent';" -v
 fi
@@ -68,7 +69,7 @@ if [ $gnRepoUpgrade -eq 1 ] || [ $gnRTorrentUpgrade -eq 1 ] || [ "$gsSwitch" == 
 	libtorrent_CFLAGS=/usr/local/lib/
 	make clean
 	./autogen.sh
-	./configure --with-xmlrpc-c
+    ./configure --with-xmlrpc-c --with-ncurses
 	make -j$gsProcessors
 	make install
 	ldconfig
