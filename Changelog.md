@@ -19,6 +19,7 @@
 			- GetTrackersCert.bsh, review certificates check and bug fix
 			- Fail2Ban, review of actions
             - rTorrent, review init script
+            - rTorrent, review rtorrent.rc config
 			- Portal
 				* Medoo Framework v1.5.7
 
