@@ -519,7 +519,7 @@ gfnCreateRtorrentConfigFile() {
 			if [ "$gsMySB_PeerBlock" == "rTorrent" ]; then
 				perl -pi -e "s/#{1}ipv4_filter.load/ipv4_filter.load/g" $sHomeDir/.rtorrent.rc
 				perl -pi -e "s/#{1}print/print/g" $sHomeDir/.rtorrent.rc
-				perl -pi -e "s/#{1}schedule=load_filter/schedule=load_filter/g" $sHomeDir/.rtorrent.rc
+				perl -pi -e "s/#{1}schedule2=load_filter/schedule2=load_filter/g" $sHomeDir/.rtorrent.rc
 			fi
 
 			case "$sFileSystemType" in
@@ -532,11 +532,11 @@ gfnCreateRtorrentConfigFile() {
 				nNumLine=$(sed -n "/watch_directory/=" $sHomeDir/.rtorrent.rc)
 				nCount=0
 				sed -i '/watch_directory/d' $sHomeDir/.rtorrent.rc
-				sed -i "${nNumLine}i\schedule = watch_directory_$nCount,5,5,\"load.start=~\/rtorrent\/watch\/*.torrent,d.set_custom2=~\/rtorrent\/torrents\/\"" $sHomeDir/.rtorrent.rc
+				sed -i "${nNumLine}i\schedule2 = watch_directory_$nCount,5,5,\"load.start=~\/rtorrent\/watch\/*.torrent,d.custom2.set=~\/rtorrent\/torrents\/\"" $sHomeDir/.rtorrent.rc
 				(( nNumLine++ )) && (( nCount++ ))
 				for sDirectory in $sDirectories; do
 					sDirectory="`echo $sDirectory | awk '{split($0,a,"|"); print a[1]}'`"
-					sed -i "${nNumLine}i\schedule = watch_directory_$nCount,5,5,\"load.start=~\/rtorrent\/watch\/$sDirectory\/*.torrent,d.set_custom1=$sDirectory,d.set_custom2=~\/rtorrent\/torrents\/$sDirectory\/,d.set_directory=~\/rtorrent\/complete\/$sDirectory\/\"" $sHomeDir/.rtorrent.rc
+					sed -i "${nNumLine}i\schedule2 = watch_directory_$nCount,5,5,\"load.start=~\/rtorrent\/watch\/$sDirectory\/*.torrent,d.custom2.set=$sDirectory,d.custom2.set=~\/rtorrent\/torrents\/$sDirectory\/,d.directory.set=~\/rtorrent\/complete\/$sDirectory\/\"" $sHomeDir/.rtorrent.rc
 					(( nNumLine++ )) && (( nCount++ ))
 				done
 
