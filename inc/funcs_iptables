@@ -394,7 +394,7 @@ gfnPopulatingUdpInboundChain() {
 				iptables -A udp_inbound -p UDP -s 0/0 -i tun+ --destination-port 137:138 -j ACCEPT -m comment --comment "Samba over OpenVPN"
 				iptables -A udp_inbound -p UDP -s 0/0 -i br0 --destination-port 137:138 -j ACCEPT -m comment --comment "Samba over OpenVPN"
 				iptables -A udp_inbound -p UDP -s 0/0 -i $gsPrimaryInet --destination-port 137:138 -j DROP
-				iptables -A udp_inbound -p UDP -s 0/0 -i $gsPrimaryInet --destination-port 137:138 -j LOG --log-prefix "[MySB] NetBIOS UDP IN 137:139: " -m comment --comment "NetBIOS UDP IN"
+				iptables -A udp_inbound -p UDP -s 0/0 -i $gsPrimaryInet --destination-port 137:138 -j LOG --log-prefix "[MySB] NetBIOS UDP IN 137:138: " -m comment --comment "NetBIOS UDP IN"
 			fi
 		;;
 	esac
