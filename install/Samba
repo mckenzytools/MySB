@@ -52,6 +52,9 @@ if [ "$gbToInstall_Samba" == "YES" ]; then
 	if [ "$2" != "INSTALL" ]; then
 		gfnManageServices start "samba"
 	fi
+
+    #### TestParm
+    testparm --suppress-prompt
 fi
 
 # -----------------------------------------
