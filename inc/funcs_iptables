@@ -390,10 +390,19 @@ gfnPopulatingUdpInboundChain() {
 	case "$1" in
 		"create")
 			if [ "$gbIsInstalled_OpenVPN" == "YES" ]; then
+                		# Samba
+                		iptables -A udp_inbound -p UDP -s 0/0 -i tun+ --destination-port 135 -j ACCEPT -m comment --comment "Samba over OpenVPN"
 				iptables -A udp_inbound -p UDP -s 0/0 -i tun+ --destination-port 137:138 -j ACCEPT -m comment --comment "Samba over OpenVPN"
+                		iptables -A udp_inbound -p UDP -s 0/0 -i tun+ --destination-port 445 -j ACCEPT -m comment --comment "Samba over OpenVPN"
+                		iptables -A udp_inbound -p UDP -s 0/0 -i br0 --destination-port 135 -j ACCEPT -m comment --comment "Samba over OpenVPN"
 				iptables -A udp_inbound -p UDP -s 0/0 -i br0 --destination-port 137:138 -j ACCEPT -m comment --comment "Samba over OpenVPN"
+                		iptables -A udp_inbound -p UDP -s 0/0 -i br0 --destination-port 445 -j ACCEPT -m comment --comment "Samba over OpenVPN"
+				iptables -A udp_inbound -p UDP -s 0/0 -i $gsPrimaryInet --destination-port 135 -j DROP
+				iptables -A udp_inbound -p UDP -s 0/0 -i $gsPrimaryInet --destination-port 135 -j LOG --log-prefix "[MySB] NetBIOS UDP IN 135: " -m comment --comment "NetBIOS UDP IN"
 				iptables -A udp_inbound -p UDP -s 0/0 -i $gsPrimaryInet --destination-port 137:138 -j DROP
 				iptables -A udp_inbound -p UDP -s 0/0 -i $gsPrimaryInet --destination-port 137:138 -j LOG --log-prefix "[MySB] NetBIOS UDP IN 137:138: " -m comment --comment "NetBIOS UDP IN"
+				iptables -A udp_inbound -p UDP -s 0/0 -i $gsPrimaryInet --destination-port 445 -j DROP
+				iptables -A udp_inbound -p UDP -s 0/0 -i $gsPrimaryInet --destination-port 445 -j LOG --log-prefix "[MySB] NetBIOS UDP IN 445: " -m comment --comment "NetBIOS UDP IN"
 			fi
 		;;
 	esac
@@ -612,17 +621,23 @@ gfnPopulatingTcpInboundChain() {
 					iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port $gsPort_OpenVPN_TAP_WithoutGW -j ACCEPT -m comment --comment "OpenVPN bridged without GW for users"
 				fi
 
-                # Samba
-                iptables -A tcp_inbound -p TCP -s 0/0 -i tun+ --destination-port 139 -j ACCEPT -m comment --comment "Samba over OpenVPN"
-                iptables -A tcp_inbound -p TCP -s 0/0 -i tun+ --destination-port 445 -j ACCEPT -m comment --comment "Samba over OpenVPN"
-                iptables -A tcp_inbound -p TCP -s 0/0 -i br0 --destination-port 139 -j ACCEPT -m comment --comment "Samba over OpenVPN"
-                iptables -A tcp_inbound -p TCP -s 0/0 -i br0 --destination-port 445 -j ACCEPT -m comment --comment "Samba over OpenVPN"
-                iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 135 -j DROP
-                iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 135 -j LOG --log-prefix "[MySB] NetBIOS UDP IN 135: " -m comment --comment "NetBIOS UDP IN"
-                iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 139 -j DROP
-                iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 139 -j LOG --log-prefix "[MySB] NetBIOS UDP IN 139: " -m comment --comment "NetBIOS UDP IN"
-                iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 445 -j DROP
-                iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 445 -j LOG --log-prefix "[MySB] NetBIOS UDP IN 445: " -m comment --comment "NetBIOS UDP IN"
+				# Samba
+				iptables -A tcp_inbound -p TCP -s 0/0 -i tun+ --destination-port 135 -j ACCEPT -m comment --comment "Samba over OpenVPN"
+				iptables -A tcp_inbound -p TCP -s 0/0 -i tun+ --destination-port 137 -j ACCEPT -m comment --comment "Samba over OpenVPN"
+				iptables -A tcp_inbound -p TCP -s 0/0 -i tun+ --destination-port 139 -j ACCEPT -m comment --comment "Samba over OpenVPN"
+				iptables -A tcp_inbound -p TCP -s 0/0 -i tun+ --destination-port 445 -j ACCEPT -m comment --comment "Samba over OpenVPN"
+				iptables -A tcp_inbound -p TCP -s 0/0 -i br0 --destination-port 135 -j ACCEPT -m comment --comment "Samba over OpenVPN"
+				iptables -A tcp_inbound -p TCP -s 0/0 -i br0 --destination-port 137 -j ACCEPT -m comment --comment "Samba over OpenVPN"
+				iptables -A tcp_inbound -p TCP -s 0/0 -i br0 --destination-port 139 -j ACCEPT -m comment --comment "Samba over OpenVPN"
+				iptables -A tcp_inbound -p TCP -s 0/0 -i br0 --destination-port 445 -j ACCEPT -m comment --comment "Samba over OpenVPN"
+				iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 135 -j DROP
+				iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 135 -j LOG --log-prefix "[MySB] NetBIOS UDP IN 135: " -m comment --comment "NetBIOS UDP IN"
+				iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 137 -j DROP
+				iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 137 -j LOG --log-prefix "[MySB] NetBIOS UDP IN 137: " -m comment --comment "NetBIOS UDP IN"
+				iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 139 -j DROP
+				iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 139 -j LOG --log-prefix "[MySB] NetBIOS UDP IN 139: " -m comment --comment "NetBIOS UDP IN"
+				iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 445 -j DROP
+				iptables -A tcp_inbound -p TCP -s 0/0 -i $gsPrimaryInet --destination-port 445 -j LOG --log-prefix "[MySB] NetBIOS UDP IN 445: " -m comment --comment "NetBIOS UDP IN"
 
 				# SSHd
 				iptables -A tcp_inbound -p TCP -s 0/0 -i tun+ --destination-port $gsPort_SSH -j ACCEPT -m comment --comment "SSH and SFTP over OpenVPN"
