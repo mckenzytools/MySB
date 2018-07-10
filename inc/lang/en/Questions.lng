@@ -54,7 +54,7 @@ ${CYELLOW}However, you will still need to add at least one IP to the next questi
 Just remember that Fail2Ban and PeerGuardian can block you if you do not enable this feature...$CEND"
 Questions_UseIprestriction="Do you want to activate the IP restriction ?"
 
-Questions_Message_AddAddresses="${CYELLOW}Now add at least one of your public IP addresses that will allowed to connect to your server for all services (white list).
+Questions_Message_AddAddresses="${CYELLOW}Now add at least one of your (public or private) IP addresses that will allowed to connect to your server for all services (white list).
 You will be able to manage this list later on the portal, and also to add dynamic IP addresses managed with hostnames (DynDNS, No-IP, ...).$CEND"
 Questions_AddAddresses="What are the public IP addresses that you want to add now ? (ex: x.x.x.x,y.y.y.y)"
 
@@ -132,10 +132,10 @@ Questions_InstallDNScrypt="Do you want to install DNScrypt-proxy (recommended) ?
 Questions_Message_Statistics="${CYELLOW}Would you like to report me your installation ?
 The informations collected are:
 1/	The version number of MySB ($gsCurrentVersion)
-2/	The country where your server is located ($gsCountry)
+2/	The country where your server is located ($sCountry)
 3/	The ID of your server (/etc/machine-id)
 No other information is sent.
-The access logs are not kept, so the IP address of your server is not preserved.
+The access logs are not kept, so the IP address of your server is not saved.
 
 The purpose of this step is only to know if I should continue to break my ass to maintain MySB ;-)$CEND"
 Questions_SendStatistics="Do you want to report your installation to toulousain79 ? "

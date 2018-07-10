@@ -54,7 +54,7 @@ ${CYELLOW}Toutefois, vous aurez toujours besoin d'ajouter au moins une adresse I
 Rappelez-vous simplement que Fail2Ban et PeerGuardian peuvent vous bloquer si vous n'activez pas cette fonction...$CEND"
 Questions_UseIprestriction="Voulez-vous pour activer la restriction IP ?"
 
-Questions_Message_AddAddresses="${CYELLOW}Ajouter maintenant, au moins une de vos adresses IP publiques qui seront autorisées à se connecter à votre serveur pour tous les services (liste blanche).
+Questions_Message_AddAddresses="${CYELLOW}Ajouter maintenant, au moins une de vos adresses IP (publiques ou privées) qui seront autorisées à se connecter à votre serveur pour tous les services (liste blanche).
 Vous serez en mesure de gérer cette liste plus tard sur le portail, et aussi d'ajouter des adresses IP dynamiques gérées avec des noms d'hôtes (DynDNS, No-IP, ...).$CEND"
 Questions_AddAddresses="Quelles sont les adresses IP publiques que vous souhaitez ajouter dès maintenant ? (ex: x.x.x.x,y.y.y.y)"
 
@@ -132,10 +132,10 @@ Questions_InstallDNScrypt="Voulez-vous installer DNScrypt-proxy (recommandé) ? 
 Questions_Message_Statistics="${CYELLOW}Voulez-vous me signaler votre installation ?
 Les informations collectées sont:
 1/	Le numéro de version de MySB ($gsCurrentVersion)
-2/	Le pays où se trouve votre serveur ($gsCountry)
+2/	Le pays où se trouve votre serveur ($sCountry)
 3/	L'ID de votre serveur (/etc/machine-id)
 Aucune autre information n'est envoyée.
-Les logs d'accès ne sont pas conservés, l'adresse IP de votre serveur n'est donc pas conservée.
+Les logs d'accès ne sont pas conservés, l'adresse IP de votre serveur n'est donc pas enregistrée.
 
 Le but de cette démarche est uniquement de savoir si je dois continuer à me casser le cul à maintenir MySB ;-)$CEND"
 Questions_SendStatistics="Voulez-vous signaler votre installation à toulousain79 ? "
